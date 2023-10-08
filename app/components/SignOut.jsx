@@ -8,7 +8,12 @@ function SignOut() {
     return (
       <div>
         Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <button
+          className="duration-100 hover:font-bold"
+          onClick={() => signOut()}
+        >
+          Sign out
+        </button>
       </div>
     );
   }
