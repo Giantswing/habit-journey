@@ -6,5 +6,6 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {},
-  plugins: [require("tailwindcss-fluid-type")],
+  plugins: [require("tailwindcss-fluid-type"),
+  require('@whiterussianstudio/tailwind-easing')],
 };

@@ -1,63 +1,71 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "./context/AuthContext";
 
 /* Firebase */
-import { db } from "../firebase";
-import { doc, getDoc, updateDoc, collection, addDoc } from "firebase/firestore";
-
-/* Icons */
-import { FcGoogle } from "react-icons/fc";
 
 /* Components */
-import SignOut from "./components/SignOut";
-
-/* Functions */
-import { addItem } from "./utilities/addItem";
-import { importTodos } from "./utilities/importItems";
+import LogOutButton from "./components/LogOutButton";
+import NewHabitModal from "./components/NewHabitModal";
+import SwitchButton from "./components/SwitchButton";
+import ScoreCounter from "./components/ScoreCounter";
+import HabitList from "./components/HabitList";
+import NewFilterList from "./components/NewFilterList";
 
 export default function Home() {
-  const { data: session } = useSession();
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
-  const userId = session?.user.id;
+  const { user, loading, currentHabitType, setEditMode, setShowHabitModal, filters, selectedFilters, setSelectedFilters } = useAuthContext();
+  const router = useRouter();
 
-  if (!session) {
-    // If its not signed in, redirect to signin page
-    redirect("/api/auth/signin");
-  }
+  const [isSwitching, setIsSwitching] = useState(false);
 
-  useEffect(() => {
-    importTodos(userId, setTodos);
-  }, [userId]);
+  useEffect(
+    () => {
+      if (!user && !loading) {
+        router.push("/login");
+      }
+    },
+    [user]
+  );
+
+  if (loading)
+    return (
+      <main className="p-8">
+        <h2 className="text-center">Loading...</h2>
+      </main>
+    );
 
   return (
-    <main className="p-8">
-      <h1 className="mt-4 mb-8 text-4xl uppercase">My test TODO app</h1>
-      <h2>User ID: {userId}</h2>
-      <SignOut />
-      <div className="mt-8">
-        <h2 className="mb-4 text-2xl uppercase bg-slate-400">TODOs</h2>
-        <input
-          type="text"
-          placeholder="New todo"
-          onChange={(e) => setNewTodo?.(e.target.value)}
-          value={newTodo}
-          className="w-full p-2 mb-4 border-2 border-gray-400 rounded-lg"
-        />
-        <button
-          onClick={() => addItem(todos, setTodos, newTodo, setNewTodo, userId)}
-          className="px-4 py-2 mb-4 text-white rounded-lg bg-slate-400"
+    <main className="mb-24">
+      <div className="p-4">
+        <section className="pb-2 mb-4 border-b" >
+          <LogOutButton />
+          <ScoreCounter />
+        </section >
+
+        {/* <section className={`${showHabitModal ? "hidden" : "block"}`}> */}
+        <NewFilterList getter={filters} selected={selectedFilters} setSelected={setSelectedFilters} isSwitching={isSwitching} />
+        <HabitList isSwitching={isSwitching} />
+        {/* </section> */}
+
+        <button className={`w-full p-2 border rounded-md text-md ${currentHabitType === "positive" ? "border-green-600 text-green-600" : "border-red-500 text-red-500"
+          }`}
+
+          onClick={() => {
+            setEditMode(false);
+            setShowHabitModal(true);
+          }}
+
         >
-          Add
+          Add new {currentHabitType} habit
         </button>
-        <ul>
-          {todos.length > 0 &&
-            todos.map((todo, id) => <li key={id}>{todo}</li>)}
-        </ul>
       </div>
-    </main>
+
+      <NewHabitModal />
+      <SwitchButton isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
+    </main >
   );
 }
+
+// .filter((habit) => habit.type === currentHabitType)
