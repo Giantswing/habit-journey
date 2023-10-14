@@ -47,6 +47,7 @@ export default function AuthContextProvider({ children }) {
   const [selectedFilters, setSelectedFilters] = useState({ positive: "all", negative: "all" });
 
   const [showHabitModal, setShowHabitModal] = useState(false);
+  const [showEditFiltersModal, setShowEditFiltersModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
 
@@ -183,6 +184,8 @@ export default function AuthContextProvider({ children }) {
         habitToEdit,
         setHabitToEdit,
 
+        showEditFiltersModal,
+        setShowEditFiltersModal,
         selectedFilters,
         setSelectedFilters,
       }}

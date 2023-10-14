@@ -32,7 +32,7 @@ export default function HabitList({ isSwitching }) {
                 else return habit.category === selectedFilters.negative;
               }
             })
-            .map((habit, id) => <Habit key={id} habit={habit} />)}
+            .map((habit) => <Habit key={habit.id} habit={habit} />)}
       </ul>
     </div>
   );

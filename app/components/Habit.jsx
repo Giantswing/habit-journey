@@ -7,27 +7,24 @@ import { useAuthContext } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import convertSecondsToTime from "../utils/convertSecondsToTime";
 
-export default function Habit({ id, habit }) {
+export default function Habit({ habit }) {
   const { score, setScore, habits, setHabits, setEditMode, setShowHabitModal, setHabitToEdit, currentHabitType } = useAuthContext();
-  const [isEnabled, setIsEnabled] = useState(true);
+
   const [shouldWait, setShouldWait] = useState(false);
-
-  const [show, setShow] = useState(true);
-  const [lastUsed, setLastUsed] = useState(habit.lastUsed);
-
   const [auxInfo, setAuxInfo] = useState("");
   const [isPressed, setIsPressed] = useState(false);
+  const [myHabit, setMyHabit] = useState(habit);
 
   //Change score when the habit is pressed
   function changeScore() {
-    if (shouldWait || !isEnabled) return;
+    if (shouldWait || !myHabit.enabled) return;
 
     setIsPressed(true);
     setTimeout(() => {
       setIsPressed(false);
     }, 100);
 
-    const costValue = Number(habit.cost);
+    const costValue = Number(myHabit.cost);
 
     if (habit.type === "positive") {
       setScore((prevScore) => parseInt(prevScore) + costValue);
@@ -35,20 +32,14 @@ export default function Habit({ id, habit }) {
       setScore((prevScore) => parseInt(prevScore) - costValue);
     }
 
-    habit.lastUsed = Date.now();
-    setLastUsed(Date.now());
-
-    //find the habit in the array and update it
-    const habitIndex = habits.findIndex((habit) => habit.id === id);
-    habits[habitIndex] = habit;
-    setHabits([...habits]);
+    setMyHabit({ ...habit, lastUsed: Date.now() });
   }
 
   //Handle the time remaining for the habit to be available again
   useEffect(() => {
-    if (lastUsed == null) return;
+    if (myHabit.lastUsed === undefined) return () => {};
 
-    const timeDiff = Date.now() - lastUsed;
+    const timeDiff = Date.now() - myHabit.lastUsed;
     const timeRemaining = habit.duration * 1000 - timeDiff;
 
     if (timeRemaining > 0) {
@@ -59,27 +50,33 @@ export default function Habit({ id, habit }) {
     } else {
       setShouldWait(false);
     }
-  }, [lastUsed, habit.duration, currentHabitType]);
+  }, [myHabit.duration, myHabit.lastUsed, currentHabitType]);
+
+  //Update the habit reference when the habit list changes
+  useEffect(() => {
+    setMyHabit(habit);
+  }, [habit]);
 
   //Update the aux info of the habit
   useEffect(() => {
     var result = "";
     if (shouldWait) {
       result = "Doing...";
-    } else if (!isEnabled) {
+    } else if (!myHabit.enabled) {
       result = "Not enough points";
     }
     setAuxInfo(result);
-  }, [shouldWait, isEnabled, currentHabitType]);
+  }, [shouldWait, myHabit.enabled, currentHabitType]);
 
-  //Maintain the enabled/disabled state of the habit based on the habit.enabled property
+  //Update the habit list when the habit is updated
   useEffect(() => {
-    if (!habit.enabled == null) {
-      habit.enabled = true;
-    }
+    const newHabits = habits.map((habit) => {
+      if (habit.id === myHabit.id) return myHabit;
+      else return habit;
+    });
 
-    setIsEnabled(habit.enabled);
-  }, [habit.enabled]);
+    setHabits(newHabits);
+  }, [myHabit]);
 
   //Handles if the negative habit should disable itself because the score is too low to afford it
   useEffect(() => {
@@ -89,22 +86,20 @@ export default function Habit({ id, habit }) {
     const costValue = Number(habit.cost);
 
     if (scoreValue - costValue < 0 && habit.enabled) {
-      habit.enabled = false;
-      setHabits([...habits]);
+      myHabit.enabled = false;
     } else if (scoreValue - costValue >= 0 && !habit.enabled) {
-      habit.enabled = true;
-      setHabits([...habits]);
+      myHabit.enabled = true;
     }
-  }, [score, habit.cost, habit.type]);
+  }, [score, myHabit.cost, myHabit.type]);
 
   return (
     <li
-      key={id}
+      key={myHabit.id}
       className={`transform rounded-md overflow-hidden bg-gradient-to-t relative p-1 pl-5 mb-3 border before:content-[''] before:w-2  before:h-auto  
       to-white before:absolute before:top-0 before:bottom-0 before:left-0
       ${habit.type === "positive" ? "before:bg-green-600  from-emerald-50 " : "before:bg-red-600 from-red-50"} 
        ${isPressed ? "scale-90 translate-y-1 " : ""} 
-       ${!isEnabled ? "opacity-80 saturate-0" : ""}
+       ${!myHabit.enabled ? "opacity-80 saturate-0" : ""}
        ${shouldWait ? "opacity-100 saturate-50 brightness-95" : ""}
        duration-75 first-letter:capitalize border-slate-300`}
     >

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Label from "./Label";
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
-// import { useSearchParams } from "next/navigation";
+import useTimeout from "../utils/useTimeout";
 
 import { AiOutlineClose, AiFillDelete } from "react-icons/ai";
 
@@ -26,6 +26,8 @@ export default function NewHabitModal() {
     maxIterations: 2,
   });
 
+  const [auxInfo, setAuxInfo] = useState([]);
+
   function resetNewHabit() {
     setNewHabit({
       id: parseInt(Date.now().toString().slice(-5)),
@@ -40,8 +42,75 @@ export default function NewHabitModal() {
       iterations: 0,
       maxIterations: 2,
     });
+  }
 
-    setShowHabitModal(false);
+  const timeoutId = useRef(null);
+
+  function addNewHabit() {
+    //Verify if the habit is valid
+    var anyError = false;
+    var errorMsg = [];
+
+    if (!newHabit.title || !newHabit.cost || !newHabit.duration) {
+      anyError = true;
+      errorMsg.push("Please fill all the fields");
+    }
+
+    if (!newHabit.unlimited && newHabit.iterations > newHabit.maxIterations) {
+      anyError = true;
+      errorMsg.push("Iterations can't be greater than max iterations");
+    }
+    if (!newHabit.unlimited && newHabit.iterations < 0) {
+      anyError = true;
+      errorMsg.push("Iterations can't be less than 0");
+    }
+    if (!newHabit.unlimited && newHabit.maxIterations < 1) {
+      anyError = true;
+      errorMsg.push("Max iterations can't be less than 1");
+    }
+
+    if (newHabit.cost < 1) {
+      anyError = true;
+      errorMsg.push("Cost can't be less than 1");
+    }
+
+    if (newHabit.duration < 1) {
+      anyError = true;
+      errorMsg.push("Duration can't be less than 1");
+    }
+
+    setAuxInfo(errorMsg);
+
+    clearTimeout(timeoutId.current);
+
+    timeoutId.current = setTimeout(() => {
+      setAuxInfo([]);
+    }, 6000);
+
+    if (anyError) return () => clearTimeout(timeoutId);
+
+    //Add the habit if the habit is valid
+    var newHabitToAdd = { ...newHabit, type: currentHabitType };
+
+    if (editMode) {
+      setHabits((prevHabits) => {
+        return prevHabits.map((habit) => {
+          if (habit.id === newHabit.id) {
+            habit = newHabit;
+          }
+          return habit;
+        });
+      });
+    }
+
+    if (!editMode) {
+      setHabits((prevHabits) => {
+        return [...prevHabits, newHabitToAdd];
+      });
+    }
+
+    closeModal();
+    resetNewHabit();
   }
 
   function closeModal() {
@@ -62,7 +131,7 @@ export default function NewHabitModal() {
 
   useEffect(() => {
     resetNewHabit();
-  }, []);
+  }, [showHabitModal]);
 
   useEffect(() => {
     if (editMode && habitToEdit) {
@@ -79,7 +148,7 @@ export default function NewHabitModal() {
         className={`p-5 mb-4 border-2
     ${showHabitModal ? "scale-100" : "scale-0"}
     
-     fixed max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full bg-white rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100
+     fixed max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[97%] bg-white rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100
     `}
       >
         <h2
@@ -125,14 +194,12 @@ export default function NewHabitModal() {
 
           <div className={`transition-all p-3 border-slate-300 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
             <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2`}>
-              <input
-                type="checkbox"
-                id="unlimited"
-                name="unlimited"
-                value="unlimited"
-                onChange={(e) => setNewHabit({ ...newHabit, unlimited: e.target.checked })}
-                className="w-8 h-5 duration-150 border-2 border-gray-600 rounded-md appearance-none active:scale-50 checked:bg-slate-600 checked:border-transparent focus:outline-none"
-              />
+              <button
+                onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}
+                className={`w-8 h-5 duration-150 border-2 border-gray-600 rounded-md appearance-none active:scale-50 ${
+                  newHabit.unlimited ? "bg-slate-600 border-transparent" : "bg-white"
+                }`}
+              ></button>
 
               <label htmlFor="unlimited" className="text-md">
                 Unlimited uses per day
@@ -147,32 +214,18 @@ export default function NewHabitModal() {
           </div>
         </div>
 
-        <button
-          onClick={() => {
-            var newHabitToAdd = { ...newHabit, type: currentHabitType };
+        {auxInfo.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {auxInfo.map((info, index) => (
+              <div className="text-xs text-red-600">
+                {info}
+                {index !== auxInfo.length - 1 && ", "}
+              </div>
+            ))}
+          </div>
+        )}
 
-            if (editMode) {
-              setHabits((prevHabits) => {
-                return prevHabits.map((habit) => {
-                  if (habit.id === newHabit.id) {
-                    habit = newHabit;
-                  }
-                  return habit;
-                });
-              });
-            }
-
-            if (!editMode) {
-              setHabits((prevHabits) => {
-                return [...prevHabits, newHabitToAdd];
-              });
-            }
-
-            closeModal();
-            resetNewHabit();
-          }}
-          className="w-full px-4 py-2 mt-5 text-white rounded-md bg-slate-800"
-        >
+        <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-slate-800">
           {editMode ? "Edit" : "Add"} {currentHabitType} habit
         </button>
       </section>
