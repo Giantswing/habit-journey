@@ -4,14 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Toggle from "./Toggle";
 
 export default function EditFiltersModal() {
-  const {
-    filters,
-    setFilters,
-    showEditFiltersModal,
-    setShowEditFiltersModal,
-    habits,
-    setHabits,
-  } = useAuthContext();
+  const { filters, setFilters, showEditFiltersModal, setShowEditFiltersModal, habits, setHabits } = useAuthContext();
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterType, setFilterType] = useState(true);
@@ -40,11 +33,7 @@ export default function EditFiltersModal() {
       errorMsg.push("Name can't be 'all'");
     }
 
-    if (
-      filters.some(
-        (filter) => filter.title === filterName && filter.type === auxFilterType
-      )
-    ) {
+    if (filters.some((filter) => filter.title === filterName && filter.type === auxFilterType)) {
       anyError = true;
       errorMsg.push("Name already exists");
     }
@@ -65,10 +54,7 @@ export default function EditFiltersModal() {
     var auxFilterType = filterType ? "negative" : "positive";
 
     newHabits.forEach((habit, index) => {
-      if (
-        habit.type === changedFilter.type &&
-        habit.category === changedFilter.title
-      ) {
+      if (habit.type === changedFilter.type && habit.category === changedFilter.title) {
         if (changedFilter.type == auxFilterType) {
           habit.category = filterName;
           //console.log("same type, changed category");
@@ -86,10 +72,7 @@ export default function EditFiltersModal() {
     var newHabits = [...habits];
 
     newHabits.forEach((habit, index) => {
-      if (
-        habit.type === deletedFilter.type &&
-        habit.category === deletedFilter.title
-      ) {
+      if (habit.type === deletedFilter.type && habit.category === deletedFilter.title) {
         habit.category = "all";
         console.log("habit changed");
       }
@@ -104,10 +87,7 @@ export default function EditFiltersModal() {
     var newFilters = [...filters];
 
     newFilters.forEach((filter, index) => {
-      if (
-        filter.title === selectedFilter.title &&
-        filter.type === selectedFilter.type
-      ) {
+      if (filter.title === selectedFilter.title && filter.type === selectedFilter.type) {
         newFilters.splice(index, 1);
       }
     });
@@ -124,10 +104,7 @@ export default function EditFiltersModal() {
     var newFilters = [...filters];
 
     newFilters.forEach((filter) => {
-      if (
-        filter.title === selectedFilter.title &&
-        filter.type === selectedFilter.type
-      ) {
+      if (filter.title === selectedFilter.title && filter.type === selectedFilter.type) {
         filter.title = filterName;
         filter.type = filterType ? "negative" : "positive";
       }
@@ -180,17 +157,10 @@ export default function EditFiltersModal() {
         className={`${showEditFiltersModal ? "scale-100" : "scale-0"} 
         fixed p-5 w-[97%] max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-50 rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100`}
       >
-        <h2 className={`pb-3 mb-4 border-b font-semibold text-center`}>
-          Add or Edit filters
-        </h2>
+        <h2 className={`pb-3 mb-4 border-b font-semibold text-center`}>Add or Edit filters</h2>
 
         <div className="mb-4">
-          <Toggle
-            getter={isEditing}
-            setter={setIsEditing}
-            firstOption="Add filter"
-            secondOption="Edit existing"
-          />
+          <Toggle getter={isEditing} setter={setIsEditing} firstOption="Add filter" secondOption="Edit existing" />
         </div>
 
         <div className="flex flex-col">
@@ -219,8 +189,7 @@ export default function EditFiltersModal() {
                           type: filter.type,
                         })}
                       >
-                        {filter.title.charAt(0).toUpperCase() +
-                          filter.title.slice(1)}
+                        {filter.title.charAt(0).toUpperCase() + filter.title.slice(1)}
                       </option>
                     ))}
                 </select>
@@ -235,9 +204,7 @@ export default function EditFiltersModal() {
                     before:cotent-[''] before:absolute before:top-3 before:left-0 before:right-0 before:z-[-1] 
                     before:h-1 before:bg-slate-300"
                   >
-                    <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-slate-50">
-                      Editing {selectedFilter.title}
-                    </h3>
+                    <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-slate-50">Editing {selectedFilter.title}</h3>
                   </div>
                 )}
                 <div className="flex items-center gap-2 mb-4">
@@ -262,38 +229,23 @@ export default function EditFiltersModal() {
                   <label htmlFor="filterType" className="w-20">
                     Type
                   </label>
-                  <Toggle
-                    getter={filterType}
-                    setter={setFilterType}
-                    firstOption="Positive"
-                    secondOption="Negative"
-                    type="greenred"
-                  />
+                  <Toggle getter={filterType} setter={setFilterType} firstOption="Positive" secondOption="Negative" type="greenred" />
                 </div>
 
                 {isEditing && (
                   <>
-                    <button
-                      className="w-full p-2 mb-4 text-white bg-red-600 rounded-md"
-                      onClick={deleteFilter}
-                    >
+                    <button className="w-full p-2 mb-4 text-white bg-red-600 rounded-md" onClick={deleteFilter}>
                       Delete
                     </button>
 
-                    <button
-                      className="w-full p-2 text-white capitalize rounded-md bg-slate-600"
-                      onClick={editFilter}
-                    >
+                    <button className="w-full p-2 text-white capitalize rounded-md bg-slate-600" onClick={editFilter}>
                       Edit {selectedFilter.title}
                     </button>
                   </>
                 )}
 
                 {!isEditing && (
-                  <button
-                    className="w-full p-2 text-white capitalize rounded-md bg-slate-600"
-                    onClick={addNewFilter}
-                  >
+                  <button className="w-full p-2 text-white capitalize rounded-md bg-slate-600" onClick={addNewFilter}>
                     Add new filter
                   </button>
                 )}
@@ -317,8 +269,8 @@ export default function EditFiltersModal() {
         onClick={() => {
           closeModal();
         }}
-        className={`duration-400 fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-50 ${
-          showEditFiltersModal ? "block opacity-100" : "opacity-0 hidden"
+        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-black  ${
+          showEditFiltersModal ? "bg-opacity-50 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
         }`}
       ></div>
     </>
