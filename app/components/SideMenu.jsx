@@ -1,8 +1,9 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "../context/AuthContext";
+import Image from "next/image";
 
 export default function SideMenu({ showSideMenu, setShowSideMenu }) {
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
   return (
     <>
       <div
@@ -17,13 +18,29 @@ export default function SideMenu({ showSideMenu, setShowSideMenu }) {
           </button>
         </div>
 
-        <h2 className="text-4xl text-center text-white uppercase">Welcome back, {user?.displayName}</h2>
+        <div className="relative flex flex-col items-center gap-4 pb-4 mb-8 border-b border-slate-600">
+          <Image src="/habit-journey-logo.png" alt="Habit Journey Logo" width={60} height={60} className="mb-5" />
+          <h2 className="text-4xl font-semibold text-center text-white uppercase">Welcome back, {user?.displayName}</h2>
+          <h4 className="text-lg text-center text-slate-400 ">{user?.email}</h4>
+        </div>
+
+        <div className="fixed bottom-[15%] w-full gap-4 text-xl text-center text-white uppercase">
+          <button
+            className="w-full p-3 font-semibold uppercase duration-200 border rounded-sm hover:bg-white hover:text-slate-900 hover:border-slate-900"
+            onClick={() => {
+              logout();
+              setShowSideMenu(false);
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       <div
         onClick={() => setShowSideMenu(false)}
         className={`
-      ${showSideMenu ? "bg-opacity-70 pointer-events-auto " : "bg-opacity-0 pointer-events-none "}
+      ${showSideMenu ? "bg-opacity-90 pointer-events-auto " : "bg-opacity-0 pointer-events-none "}
       fixed top-0 left-0 z-40 w-full h-full bg-black  duration-300 ease-in-out
       `}
       ></div>

@@ -54,7 +54,11 @@ export default function Home() {
         <section className="flex items-center justify-between pb-2 mb-4 border-b">
           <ScoreCounter />
 
-          <button onClick={() => setShowSideMenu(true)}>
+          <button
+            className={`
+          ${showSideMenu ? "opacity-0" : "opacity-100"}
+          `}
+            onClick={() => setShowSideMenu(true)}>
             <AiOutlineMenu className="inline-block w-8 h-8 duration-200 hover:opacity-50" />
           </button>
         </section>

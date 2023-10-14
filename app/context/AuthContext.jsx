@@ -3,10 +3,13 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
 
 export const AuthContext = createContext(null);
 
 export default function AuthContextProvider({ children }) {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(0);
@@ -77,11 +80,7 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  async function saveData(
-    newScore = score,
-    newHabits = habits,
-    newFilters = filters
-  ) {
+  async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
@@ -129,6 +128,16 @@ export default function AuthContextProvider({ children }) {
       },
       { merge: true }
     );
+  }
+
+  async function logout() {
+    console.log("Logging out");
+    try {
+      await signOut(auth);
+      router.push("/login");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   // Auto saving
@@ -195,6 +204,8 @@ export default function AuthContextProvider({ children }) {
         setShowEditFiltersModal,
         selectedFilters,
         setSelectedFilters,
+
+        logout,
       }}
     >
       {children}
