@@ -44,7 +44,10 @@ export default function AuthContextProvider({ children }) {
     },
   ];
   const [filters, setFilters] = useState(defaultFilters);
-  const [selectedFilters, setSelectedFilters] = useState({ positive: "all", negative: "all" });
+  const [selectedFilters, setSelectedFilters] = useState({
+    positive: "all",
+    negative: "all",
+  });
 
   const [showHabitModal, setShowHabitModal] = useState(false);
   const [showEditFiltersModal, setShowEditFiltersModal] = useState(false);
@@ -74,7 +77,11 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
+  async function saveData(
+    newScore = score,
+    newHabits = habits,
+    newFilters = filters
+  ) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
@@ -126,17 +133,17 @@ export default function AuthContextProvider({ children }) {
 
   // Auto saving
   useEffect(() => {
-    console.log("Saving score");
+    //console.log("Saving score");
     saveScore();
   }, [score]);
 
   useEffect(() => {
-    console.log("Saving habits");
+    //console.log("Saving habits");
     saveHabits();
   }, [habits]);
 
   useEffect(() => {
-    console.log("Saving filters");
+    //console.log("Saving filters");
     saveFilters();
   }, [filters]);
   // End auto saving
