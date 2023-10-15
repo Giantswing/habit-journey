@@ -71,6 +71,11 @@ export default function NewHabitModal() {
       errorMsg.push("Max iterations can't be less than 1");
     }
 
+    if (!newHabit.unlimited && newHabit.maxIterations > 10) {
+      anyError = true;
+      errorMsg.push("Max iterations can't be greater than 10");
+    }
+
     if (newHabit.cost < 1) {
       anyError = true;
       errorMsg.push("Cost can't be less than 1");

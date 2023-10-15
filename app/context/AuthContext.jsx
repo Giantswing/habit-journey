@@ -15,6 +15,7 @@ export default function AuthContextProvider({ children }) {
   const [score, setScore] = useState(0);
   const [habits, setHabits] = useState([]);
   const [currentHabitType, setCurrentHabitType] = useState("positive");
+  const [lastLoginDate, setLastLoginDate] = useState(null);
 
   const defaultFilters = [
     {
@@ -67,7 +68,8 @@ export default function AuthContextProvider({ children }) {
 
     if (!docSnap.exists()) return;
 
-    if (docSnap.data().habits) {
+    var tempHabits = docSnap.data().habits;
+    if (tempHabits) {
       setHabits(docSnap.data().habits);
     }
 
@@ -93,6 +95,25 @@ export default function AuthContextProvider({ children }) {
       console.log("Sound settings not found, defaulting to true");
       setSoundEnabled(true);
     }
+
+    if (docSnap.data().lastDate !== undefined) {
+      var oldDate = docSnap.data().lastDate;
+      var newDate = parseInt(new Date().getDate());
+      if (oldDate !== newDate) {
+        refreshHabitIterations(tempHabits);
+      }
+      setLastLoginDate(newDate);
+    } else {
+      setLastLoginDate(parseInt(new Date().getDate()));
+    }
+  }
+
+  function refreshHabitIterations(tempHabits) {
+    //map through all habits and set their iterations to 0
+    for (var i = 0; i < tempHabits.length; i++) {
+      tempHabits[i].iterations = 0;
+    }
+    setHabits(tempHabits);
   }
 
   async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
@@ -145,7 +166,7 @@ export default function AuthContextProvider({ children }) {
     );
   }
 
-  async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled) {
+  async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled, newDate = lastLoginDate) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
@@ -153,6 +174,7 @@ export default function AuthContextProvider({ children }) {
       {
         theme: newTheme ? "dark" : "light",
         sound: newSoundEnabled,
+        lastDate: newDate,
       },
       { merge: true }
     );
@@ -187,7 +209,7 @@ export default function AuthContextProvider({ children }) {
   useEffect(() => {
     //console.log("Saving theme " + darkMode);
     saveUserData();
-  }, [darkMode, soundEnabled]);
+  }, [darkMode, soundEnabled, lastLoginDate]);
 
   // End auto saving
 

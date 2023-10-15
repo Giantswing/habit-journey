@@ -1,6 +1,8 @@
 import React from "react";
 import { BiTimeFive } from "react-icons/bi";
 import { AiOutlineFilter, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { BsCircle, BsCircleFill } from "react-icons/bs";
+import { IoIosInfinite } from "react-icons/io";
 import { PiCoinsDuotone, PiGearDuotone } from "react-icons/pi";
 import { useAuthContext } from "../context/AuthContext";
 
@@ -18,6 +20,9 @@ export default function Habit({ habit }) {
   //Change score when the habit is pressed
   function changeScore() {
     if (shouldWait || !myHabit.enabled) return;
+    if (!habit.unlimited && habit.iterations >= habit.maxIterations) return;
+
+    if (!habit.unlimited) habit.iterations++;
 
     setIsPressed(true);
     setTimeout(() => {
@@ -32,7 +37,25 @@ export default function Habit({ habit }) {
       setScore((prevScore) => parseInt(prevScore) - costValue);
     }
 
-    setMyHabit({ ...habit, lastUsed: Date.now() });
+    setMyHabit({ ...habit, lastUsed: Date.now(), iterations: habit.iterations });
+  }
+
+  //Handle the iterations of the habit
+  function displayIterations() {
+    if (habit.unlimited || habit.maxIterations === 0) {
+      return <IoIosInfinite />;
+    } else {
+      var iterations = [];
+      for (var i = 0; i < habit.maxIterations; i++) {
+        if (i < habit.iterations) {
+          iterations.push(<BsCircleFill key={i} />);
+        } else {
+          iterations.push(<BsCircle key={i} />);
+        }
+      }
+
+      return iterations;
+    }
   }
 
   //Handle the time remaining for the habit to be available again
@@ -64,9 +87,11 @@ export default function Habit({ habit }) {
       result = "Doing...";
     } else if (!myHabit.enabled) {
       result = "Not enough points";
+    } else if (!myHabit.unlimited && myHabit.iterations >= myHabit.maxIterations) {
+      result = "Daily limit reached";
     }
     setAuxInfo(result);
-  }, [shouldWait, myHabit.enabled, currentHabitType]);
+  }, [shouldWait, myHabit.enabled, currentHabitType, myHabit.iterations, myHabit.maxIterations]);
 
   //Update the habit list when the habit is updated
   useEffect(() => {
@@ -125,6 +150,13 @@ export default function Habit({ habit }) {
               {habit.category}
             </div>
           )}
+
+          <div
+            className={`flex items-center gap-1 
+          ${habit.type === "positive" ? "text-green-600" : "text-red-600"}`}
+          >
+            {displayIterations()}
+          </div>
         </div>
       </div>
 

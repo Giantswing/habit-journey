@@ -9,7 +9,7 @@ export default function SideMenu({ showSideMenu, setShowSideMenu }) {
     <>
       <div
         className={`
-        ${showSideMenu ? "translate-x" : "translate-x-full "}
+        ${showSideMenu ? "translate-x" : "translate-x-full opacity-0"}
         p-4 pt-7 fixed max-w-lg top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full h-full z-50 transtion-transform ease-out-expo duration-300 
         `}
       >

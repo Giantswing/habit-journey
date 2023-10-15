@@ -38,7 +38,8 @@ export default function LoginPage() {
         await setDoc(docRef, {
           score: 0,
           theme: 'light',
-          soundEnabled: true
+          soundEnabled: true,
+          lastLoginDate: parseInt(new Date().getDate()),
         }, { merge: true });
       }
 
