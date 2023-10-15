@@ -35,7 +35,7 @@ export default function SideMenu({ showSideMenu, setShowSideMenu }) {
           <Toggle firstOption="Off" secondOption="On" getter={soundEnabled} setter={setSoundEnabled} />
         </div>
 
-        <div className="fixed bottom-[15%] w-full gap-4 text-xl text-center text-white uppercase">
+        <div className="fixed gap-4 text-xl text-center text-white uppercase left-5 right-5 bottom-10">
           <button
             className="w-full p-3 font-semibold uppercase duration-200 border rounded-sm hover:bg-white hover:text-pale-900 hover:border-pale-900"
             onClick={() => {
