@@ -5,6 +5,10 @@ import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
+import { useRef } from "react";
+
+import HexEncode from "../utils/hexEncode";
+import encryptHabits from "../utils/encrypt";
 
 export const AuthContext = createContext(null);
 
@@ -16,6 +20,7 @@ export default function AuthContextProvider({ children }) {
   const [habits, setHabits] = useState([]);
   const [currentHabitType, setCurrentHabitType] = useState("positive");
   const [lastLoginDate, setLastLoginDate] = useState(null);
+  const decryptKey = useRef(null);
 
   const defaultFilters = [
     {
@@ -106,6 +111,23 @@ export default function AuthContextProvider({ children }) {
     } else {
       setLastLoginDate(parseInt(new Date().getDate()));
     }
+
+    const keyRef = doc(db, "server", "data");
+    const keySnap = await getDoc(keyRef);
+
+    if (keySnap.exists()) {
+      const key1 = keySnap.get("key1");
+      const key2 = keySnap.get("key2");
+      const key3 = keySnap.get("key3");
+
+      //console.log(userId);
+      //var resultkey = (key1 * key2 * key3) / userId;
+      var resultkey = HexEncode((key1 * key2 * key3 + 12345) ^ 3);
+      resultkey = "" + resultkey + userId + parseInt(resultkey * 4 - 27);
+      resultkey = resultkey.slice(0, 5) + resultkey.slice(10, 15) + resultkey.slice(8, 14) + resultkey.slice(2, 7);
+
+      decryptKey.current = resultkey;
+    }
   }
 
   function refreshHabitIterations(tempHabits) {
@@ -145,10 +167,12 @@ export default function AuthContextProvider({ children }) {
   async function saveHabits(newHabits = habits) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
+    const encryptedHabits = await encryptHabits(newHabits, decryptKey.current);
+
     await setDoc(
       docRef,
       {
-        habits: newHabits,
+        habits: encryptedHabits,
       },
       { merge: true }
     );
@@ -268,6 +292,8 @@ export default function AuthContextProvider({ children }) {
         setSoundEnabled,
 
         logout,
+
+        decryptKey,
       }}
     >
       {children}
