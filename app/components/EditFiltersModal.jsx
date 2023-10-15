@@ -155,9 +155,9 @@ export default function EditFiltersModal() {
     <>
       <div
         className={`${showEditFiltersModal ? "scale-100" : "scale-0"} 
-        fixed p-5 w-[97%] max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-50 rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100`}
+        fixed p-5 pb-2 w-[97%] max-w-md top-1/2 border left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-pale-50 dark:bg-pale-800 dark:border-pale-700 rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100`}
       >
-        <h2 className={`pb-3 mb-4 border-b font-semibold text-center`}>Add or Edit filters</h2>
+        <h2 className={`pb-3 mb-4 border-b border-pale-500 font-semibold text-center dark:text-pale-100`}>Add or Edit filters</h2>
 
         <div className="mb-4">
           <Toggle getter={isEditing} setter={setIsEditing} firstOption="Add filter" secondOption="Edit existing" />
@@ -168,7 +168,7 @@ export default function EditFiltersModal() {
             {isEditing && (
               <>
                 <select
-                  className="p-2 mb-4 border-2 rounded-md"
+                  className="p-2 mb-4 border rounded-md dark:bg-pale-800 dark:text-white"
                   value={selectedFilter}
                   onChange={(e) => {
                     const selectedValue = JSON.parse(e.target.value);
@@ -183,6 +183,7 @@ export default function EditFiltersModal() {
                     .filter((filter, title, type) => filter.title != "all")
                     .map((filter) => (
                       <option
+                        className={`font-semibold ${filter.type === "negative" ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"}`}
                         key={filter.title + filter.type}
                         value={JSON.stringify({
                           title: filter.title,
@@ -202,17 +203,19 @@ export default function EditFiltersModal() {
                   <div
                     className="w-full relative mb-4
                     before:cotent-[''] before:absolute before:top-3 before:left-0 before:right-0 before:z-[-1] 
-                    before:h-1 before:bg-slate-300"
+                    before:h-1 before:bg-pale-300 dark:before:bg-pale-600"
                   >
-                    <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-slate-50">Editing {selectedFilter.title}</h3>
+                    <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-pale-50 dark:bg-pale-800 dark:text-white">
+                      Editing {selectedFilter.title}
+                    </h3>
                   </div>
                 )}
                 <div className="flex items-center gap-2 mb-4">
-                  <label htmlFor="filterTitle" className="w-20">
+                  <label htmlFor="filterTitle" className="w-20 dark:text-pale-100">
                     Name
                   </label>
                   <input
-                    className="w-full p-2 border-2 rounded-md"
+                    className="w-full p-2 border rounded-md border-pale-400 dark:bg-pale-700 dark:text-white"
                     name="filterTitle"
                     type="text"
                     value={filterName}
@@ -225,8 +228,8 @@ export default function EditFiltersModal() {
                   />
                 </div>
 
-                <div className="flex items-center gap-2 mb-4">
-                  <label htmlFor="filterType" className="w-20">
+                <div className="flex items-center gap-2 mb-10">
+                  <label htmlFor="filterType" className="w-20 dark:text-pale-100">
                     Type
                   </label>
                   <Toggle getter={filterType} setter={setFilterType} firstOption="Positive" secondOption="Negative" type="greenred" />
@@ -238,14 +241,14 @@ export default function EditFiltersModal() {
                       Delete
                     </button>
 
-                    <button className="w-full p-2 text-white capitalize rounded-md bg-slate-600" onClick={editFilter}>
+                    <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={editFilter}>
                       Edit {selectedFilter.title}
                     </button>
                   </>
                 )}
 
                 {!isEditing && (
-                  <button className="w-full p-2 text-white capitalize rounded-md bg-slate-600" onClick={addNewFilter}>
+                  <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={addNewFilter}>
                     Add new filter
                   </button>
                 )}
@@ -269,7 +272,7 @@ export default function EditFiltersModal() {
         onClick={() => {
           closeModal();
         }}
-        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-black  ${
+        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-pale-900  ${
           showEditFiltersModal ? "bg-opacity-50 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
         }`}
       ></div>

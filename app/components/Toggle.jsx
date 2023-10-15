@@ -5,7 +5,7 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
   //   const [isPressed, setIsPressed] = useState(false);
 
   function getToggleClassNames(type) {
-    var result = "rounded-full ease-out-expo duration-300 -z-50 absolute top-0  w-1/2 h-full active:brightness-50";
+    var result = "rounded-full ease-out-expo duration-300 -z-40 absolute top-0  w-1/2 h-full active:brightness-50";
 
     if (getter) {
       result += " left-1/2 ";
@@ -18,7 +18,7 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
     // }
 
     if (type == "gray") {
-      result += "bg-slate-700";
+      result += "bg-pale-700 dark:bg-pale-900";
     }
 
     if (type == "greenred") {
@@ -35,11 +35,11 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
   return (
     <div
       className={`relative w-full overflow-hidden border rounded-full 
-     border-slate-400`}
+     border-pale-400`}
     >
       <div className="z-50 flex justify-between w-full h-full ">
         <button
-          className={`duration-100 w-full ${getter ? "" : "font-semibold text-white shadow-sm"} p-2`}
+          className={`duration-100 w-full ${getter ? "" : "font-semibold text-white shadow-sm"} p-2 dark:text-white`}
           onClick={() => {
             setter(false);
 
@@ -52,7 +52,7 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
           {firstOption}
         </button>
         <button
-          className={`duration-100 w-full ${!getter ? "" : "font-semibold  text-white shadow-sm"} p-2`}
+          className={`duration-100 w-full ${!getter ? "" : "font-semibold  text-white shadow-sm"} p-2 dark:text-white`}
           onClick={() => {
             setter(true);
 
@@ -66,14 +66,9 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
         </button>
       </div>
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none ">
-        {/* <div
-          className={`${isPressed ? " brightness-50" : ""} rounded-full ease-out-expo duration-300 -z-50 absolute top-0  w-1/2  ${
-            getter ? " left-1/2 " : "left-0"
-          } h-full bg-slate-700`}
-        ></div> */}
-
         <div className={getToggleClassNames(type)}></div>
       </div>
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-50 bg-pale-100 dark:bg-pale-700"></div>
     </div>
   );
 }

@@ -12,11 +12,13 @@ export default function NewFilterList({ getter, selected, setSelected, isSwitchi
     var classReturn = "";
 
     if (currentHabitType === "positive") {
-      if (selected.positive === currentFilter.title) classReturn += "bg-green-600 text-white";
-      else classReturn += "border border-green-600 text-green-600 bg-gradient-to-t from-green-100 to-white  ";
+      if (selected.positive === currentFilter.title) classReturn += "bg-green-600 text-white dark:text-pale-900";
+      else
+        classReturn +=
+          "border border-green-600 text-green-600 bg-gradient-to-t from-green-100 to-white  dark:from-green-950 dark:to-green-900 dark:text-green-400";
     } else if (currentHabitType === "negative") {
-      if (selected.negative === currentFilter.title) classReturn += "bg-red-600 text-white";
-      else classReturn += "border border-red-600 text-red-600 bg-gradient-to-t from-red-100 to-white";
+      if (selected.negative === currentFilter.title) classReturn += "bg-red-600 text-white dark:text-pale-900";
+      else classReturn += "border border-red-600 text-red-600 bg-gradient-to-t from-red-100 to-white dark:from-red-950 dark:to-red-900 dark:text-red-200";
     }
 
     return classReturn;

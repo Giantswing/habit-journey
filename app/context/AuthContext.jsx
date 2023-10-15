@@ -56,6 +56,8 @@ export default function AuthContextProvider({ children }) {
   const [showEditFiltersModal, setShowEditFiltersModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   async function loadData({ userId }) {
     if (!userId) return;
@@ -77,6 +79,19 @@ export default function AuthContextProvider({ children }) {
       setFilters(docSnap.data().filters);
     } else {
       setFilters(defaultFilters);
+    }
+
+    if (docSnap.data().theme) {
+      setDarkMode(docSnap.data().theme === "dark");
+    } else {
+      setDarkMode(false);
+    }
+
+    if (docSnap.data().sound !== undefined) {
+      setSoundEnabled(docSnap.data().sound);
+    } else {
+      console.log("Sound settings not found, defaulting to true");
+      setSoundEnabled(true);
     }
   }
 
@@ -130,6 +145,19 @@ export default function AuthContextProvider({ children }) {
     );
   }
 
+  async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled) {
+    if (!user) return;
+    const docRef = doc(db, "users", user.uid);
+    await setDoc(
+      docRef,
+      {
+        theme: newTheme ? "dark" : "light",
+        sound: newSoundEnabled,
+      },
+      { merge: true }
+    );
+  }
+
   async function logout() {
     console.log("Logging out");
     try {
@@ -155,9 +183,15 @@ export default function AuthContextProvider({ children }) {
     //console.log("Saving filters");
     saveFilters();
   }, [filters]);
+
+  useEffect(() => {
+    //console.log("Saving theme " + darkMode);
+    saveUserData();
+  }, [darkMode, soundEnabled]);
+
   // End auto saving
 
-  // Hanble loading the data when users logs in or out
+  // Handle loading the data when users logs in or out
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -204,6 +238,12 @@ export default function AuthContextProvider({ children }) {
         setShowEditFiltersModal,
         selectedFilters,
         setSelectedFilters,
+
+        darkMode,
+        setDarkMode,
+
+        soundEnabled,
+        setSoundEnabled,
 
         logout,
       }}

@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
 import useTimeout from "../utils/useTimeout";
 
-import { AiOutlineClose, AiFillDelete } from "react-icons/ai";
+import { AiOutlineClose, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
 
 export default function NewHabitModal() {
   const { score, habits, setHabits, currentHabitType, filters, setShowHabitModal, showHabitModal, editMode, setHabitToEdit, habitToEdit, setEditMode } =
@@ -154,11 +154,12 @@ export default function NewHabitModal() {
     ${showHabitModal ? "scale-100" : "scale-0"}
     
      fixed max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[97%] bg-white rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100
+     dark:bg-pale-800 dark:border-pale-700 dark:shadow-[0_-15px_50px_rgba(0,0,0,0.2)]
     `}
       >
         <h2
           className={`pb-3 mb-4 border-b font-semibold ${
-            currentHabitType == "positive" ? "border-green-700 text-green-700" : "border-red-700 text-red-700"
+            currentHabitType == "positive" ? "border-green-700 text-green-700 dark:text-green-500" : "border-red-700 text-red-700 dark:text-red-500"
           } text-center`}
         >
           {editMode ? "Edit" : "Add new"} {currentHabitType} habit
@@ -167,7 +168,7 @@ export default function NewHabitModal() {
           onClick={() => {
             closeModal();
           }}
-          className="absolute top-4 right-4 text-slate-600"
+          className="absolute top-4 right-4 text-pale-600"
         >
           <AiOutlineClose className="text-xl" />
         </button>
@@ -192,21 +193,23 @@ export default function NewHabitModal() {
           </div>
 
           <div>
-            <label className="block mb-2 text-xs">Habit category</label>
+            <label className="block mb-2 text-xs dark:text-pale-50">Habit category</label>
             {/* <FilterList mode="modal" newHabit={newHabit} setNewHabit={setNewHabit} /> */}
             <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
           </div>
 
-          <div className={`transition-all p-3 border-slate-300 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
-            <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2`}>
+          <div className={`transition-all p-3 border-pale-300 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
+            <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2 dark:bg-pale-700 dark:border-pale-900`}>
               <button
                 onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}
-                className={`w-8 h-5 duration-150 border-2 border-gray-600 rounded-md appearance-none active:scale-50 ${
-                  newHabit.unlimited ? "bg-slate-600 border-transparent" : "bg-white"
+                className={`relative w-8 h-5 duration-150 border-2 border-gray-600 dark:border-gray-400 rounded-md appearance-none active:scale-50 ${
+                  newHabit.unlimited ? "bg-pale-600 dark:bg-pale-50 border-transparent" : "bg-white dark:bg-pale-700"
                 }`}
-              ></button>
+              >
+                {newHabit.unlimited && <AiOutlineCheck className="w-full text-3xl text-center text-white -translate-y-2 dark:text-pale-900" />}
+              </button>
 
-              <label htmlFor="unlimited" className="text-md">
+              <label htmlFor="unlimited" className="text-md dark:text-pale-50">
                 Unlimited uses per day
               </label>
             </div>
@@ -230,7 +233,7 @@ export default function NewHabitModal() {
           </div>
         )}
 
-        <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-slate-800">
+        <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-900">
           {editMode ? "Edit" : "Add"} {currentHabitType} habit
         </button>
       </section>
@@ -239,7 +242,7 @@ export default function NewHabitModal() {
         onClick={() => {
           closeModal();
         }}
-        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-black  ${
+        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-pale-900  ${
           showHabitModal ? "block bg-opacity-50 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
         }`}
       ></div>

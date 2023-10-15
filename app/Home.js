@@ -66,7 +66,7 @@ export default function Home() {
       <h2>User Name: {user?.email}</h2>
 
       <div className="mt-8">
-        <h2 className="mb-4 text-2xl uppercase bg-slate-400">TODOs</h2>
+        <h2 className="mb-4 text-2xl uppercase bg-pale-400">TODOs</h2>
         <input
           type="text"
           placeholder="New todo"
@@ -76,7 +76,7 @@ export default function Home() {
         />
         <button
           onClick={() => addItem(todos, setTodos, newTodo, setNewTodo, userId)}
-          className="px-4 py-2 mb-4 text-white rounded-lg bg-slate-400"
+          className="px-4 py-2 mb-4 text-white rounded-lg bg-pale-400"
         >
           Add
         </button>

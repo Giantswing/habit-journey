@@ -33,9 +33,19 @@ export default function LoginPage() {
         { merge: true }
       );
 
+
       if (!docSnap.data().score) {
-        await setDoc(docRef, { score: 0 }, { merge: true });
+        await setDoc(docRef, {
+          score: 0,
+          theme: 'light',
+          soundEnabled: true
+        }, { merge: true });
       }
+
+      /*
+      if (!docSnap.data().theme) {
+        await setDoc(docRef, { theme: 'light' }, { merge: true });
+      }*/
 
       router.push("/");
     });
@@ -47,7 +57,7 @@ export default function LoginPage() {
         <Image src="/habit-journey-logo.png" alt="Habit Journey Logo" width={60} height={60} className="mb-5" />
         <h1 className="mb-8 text-xl text-center uppercase">Login to Habit Journey</h1>
 
-        <button className="flex flex-col items-center px-6 py-4 mb-4 text-lg leading-tight duration-100 border border-slate-800 rounded-xl text-slate-800 hover:bg-slate-800 hover:text-white md:flex-row md:gap-4" onClick={login}>
+        <button className="flex flex-col items-center px-6 py-4 mb-4 text-lg leading-tight duration-100 border border-pale-800 rounded-xl text-pale-800 hover:bg-pale-800 hover:text-white md:flex-row md:gap-4" onClick={login}>
           <FcGoogle className="mb-2 md:mb-0" />
           Login with Google
         </button>

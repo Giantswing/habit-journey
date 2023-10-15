@@ -96,12 +96,12 @@ export default function Habit({ habit }) {
     <li
       key={myHabit.id}
       className={`transform rounded-md overflow-hidden bg-gradient-to-t relative p-1 pl-5 mb-3 border before:content-[''] before:w-2  before:h-auto  
-      to-white before:absolute before:top-0 before:bottom-0 before:left-0
-      ${habit.type === "positive" ? "before:bg-green-600  from-emerald-50 " : "before:bg-red-600 from-red-50"} 
+      to-white dark:to-pale-800 before:absolute before:top-0 before:bottom-0 before:left-0
+      ${habit.type === "positive" ? "before:bg-green-600  from-emerald-50 dark:from-emerald-900 " : "before:bg-red-600 from-red-50 dark:from-red-950"} 
        ${isPressed ? "scale-90 translate-y-1 " : ""} 
        ${!myHabit.enabled ? "opacity-80 saturate-0" : ""}
        ${shouldWait ? "opacity-100 saturate-50 brightness-95" : ""}
-       duration-75 first-letter:capitalize border-slate-300`}
+       duration-75 first-letter:capitalize border-pale-300 dark:border-pale-700`}
     >
       <div
         className={`${shouldWait ? "cursor-wait opacity-70" : "cursor-pointer"} `}
@@ -115,12 +115,12 @@ export default function Habit({ habit }) {
             <PiCoinsDuotone />
             {habit.cost}
           </div>
-          <div className="flex items-center gap-1 text-slate-700">
+          <div className="flex items-center gap-1 text-pale-700 dark:text-pale-50">
             <BiTimeFive />
             {convertSecondsToTime(habit.duration)}
           </div>
           {habit.category !== "all" && (
-            <div className="flex items-center gap-1 capitalize text-slate-700">
+            <div className="flex items-center gap-1 capitalize text-pale-700 dark:text-pale-50">
               <AiOutlineFilter />
               {habit.category}
             </div>
@@ -139,7 +139,7 @@ export default function Habit({ habit }) {
       </div>
 
       <div
-        className="absolute bottom-0 text-xl cursor-pointer w-9 text-slate-600 right-1 aspect-square"
+        className="absolute bottom-0 text-xl cursor-pointer w-9 text-pale-600 dark:text-pale-200 right-1 aspect-square"
         onClick={() => {
           setEditMode(true);
           setShowHabitModal(true);

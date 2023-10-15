@@ -29,11 +29,20 @@ export default function Home() {
     selectedFilters,
     setSelectedFilters,
     setShowEditFiltersModal,
+    darkMode
   } = useAuthContext();
   const router = useRouter();
 
   const [isSwitching, setIsSwitching] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
+
+  function setDefaultTheme() {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }
 
   useEffect(() => {
     if (!user && !loading) {
@@ -49,53 +58,60 @@ export default function Home() {
     );
 
   return (
-    <main className="relative mb-24">
-      <div className="p-4">
-        <section className="flex items-center justify-between pb-2 mb-4 border-b">
-          <ScoreCounter />
+    <>
+      <main className={`relative mb-24 ${darkMode ? "dark" : ""}`}>
+        <div className="p-4">
+          <section className="flex items-center justify-between pb-2 mb-4 border-b dark:border-pale-600">
+            <ScoreCounter />
+
+            <button
+              className={`
+          ${showSideMenu ? "opacity-0" : "opacity-100"}
+          dark:text-pale-50
+          `}
+              onClick={() => setShowSideMenu(true)}>
+              <AiOutlineMenu className="inline-block w-8 h-8 duration-200 hover:opacity-50" />
+            </button>
+          </section>
+
+          <SideMenu setShowSideMenu={setShowSideMenu} showSideMenu={showSideMenu} />
+
+          <EditFiltersModal />
+          <div className="flex items-start gap-3">
+            <NewFilterList
+              getter={filters}
+              selected={selectedFilters}
+              setSelected={setSelectedFilters}
+              isSwitching={isSwitching}
+            />
+            <button onClick={() => setShowEditFiltersModal(true)} className="dark:text-pale-300">
+              <PiGearDuotone className="inline-block w-6 h-6" />
+            </button>
+          </div>
+          <HabitList isSwitching={isSwitching} />
 
           <button
-            className={`
-          ${showSideMenu ? "opacity-0" : "opacity-100"}
-          `}
-            onClick={() => setShowSideMenu(true)}>
-            <AiOutlineMenu className="inline-block w-8 h-8 duration-200 hover:opacity-50" />
-          </button>
-        </section>
-
-        <SideMenu setShowSideMenu={setShowSideMenu} showSideMenu={showSideMenu} />
-
-        <EditFiltersModal />
-        <div className="flex items-start gap-3">
-          <NewFilterList
-            getter={filters}
-            selected={selectedFilters}
-            setSelected={setSelectedFilters}
-            isSwitching={isSwitching}
-          />
-          <button onClick={() => setShowEditFiltersModal(true)}>
-            <PiGearDuotone className="inline-block w-6 h-6" />
+            className={`w-full p-2 border rounded-md text-md ${currentHabitType === "positive"
+              ? "border-green-600 text-green-600"
+              : "border-red-500 text-red-500"
+              }`}
+            onClick={() => {
+              setEditMode(false);
+              setShowHabitModal(true);
+            }}
+          >
+            Add new {currentHabitType} habit
           </button>
         </div>
-        <HabitList isSwitching={isSwitching} />
 
-        <button
-          className={`w-full p-2 border rounded-md text-md ${currentHabitType === "positive"
-            ? "border-green-600 text-green-600"
-            : "border-red-500 text-red-500"
-            }`}
-          onClick={() => {
-            setEditMode(false);
-            setShowHabitModal(true);
-          }}
-        >
-          Add new {currentHabitType} habit
-        </button>
-      </div>
+        <NewHabitModal />
+        <SwitchButton isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
 
-      <NewHabitModal />
-      <SwitchButton isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
-    </main>
+        <div className="fixed inset-0 bg-pale-50 dark:bg-pale-900 z-[-100]">
+
+        </div>
+      </main>
+    </>
   );
 }
 
