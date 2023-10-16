@@ -108,7 +108,7 @@ export default function NewHabitModal() {
     if (anyError) return () => clearTimeout(timeoutId);
 
     //Add the habit if the habit is valid
-    var newHabitToAdd = { ...newHabit, type: currentHabitType };
+    var newHabitToAdd = { ...newHabit, type: currentHabitType, duration: parseInt(newHabit.duration * 60) };
 
     if (editMode) {
       setHabits((prevHabits) => {
