@@ -37,13 +37,13 @@ export default function Home() {
   const [isSwitching, setIsSwitching] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
 
-  function setDefaultTheme() {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }
+  // function setDefaultTheme() {
+  //   if (darkMode) {
+  //     document.documentElement.classList.add("dark");
+  //   } else {
+  //     document.documentElement.classList.remove("dark");
+  //   }
+  // }
 
   useEffect(() => {
     if (!user && !loading) {
@@ -51,16 +51,26 @@ export default function Home() {
     }
   }, [user, loading]);
 
+  function detectUserOSDarkMode() {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   if (loading)
     return (
-      <main className="p-8">
-        <h2 className="text-center">Loading...</h2>
+      <main className={`p-8 ${detectUserOSDarkMode ? "dark" : ""}`}>
+        <h2 className={`text-center text-pale-800 dark:text-pale-100 `}>Loading...</h2>
+        <div className="fixed inset-0 bg-pale-50 dark:bg-pale-900 z-[-100]  duration-1000 "></div>
       </main>
     );
 
   return (
     <>
-      <main className={`relative mb-24 ${darkMode ? "dark" : ""}`}>
+      <main className={`relative mb-24 ${darkMode === undefined && detectUserOSDarkMode} ${darkMode != undefined && darkMode == true ? "dark" : ""}`}>
         <div className="p-4">
           <section className="flex items-center justify-between pb-2 mb-4 border-b border-pale-300 dark:border-pale-600">
             <ScoreCounter />

@@ -18,6 +18,7 @@ export default function AuthContextProvider({ children }) {
   const [currentHabitType, setCurrentHabitType] = useState("positive");
   const [lastLoginDate, setLastLoginDate] = useState(null);
   const decryptKey = useRef(null);
+  const [allowSave, setAllowSave] = useState(false);
 
   const CryptoJS = require("crypto-js");
 
@@ -63,6 +64,7 @@ export default function AuthContextProvider({ children }) {
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [osDefaultTheme, setOsDefaultTheme] = useState(false); // Initialize to false as an assumption
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   async function loadData({ userId }) {
@@ -151,22 +153,15 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  // async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
-  //   if (!user) return;
-  //   const docRef = doc(db, "users", user.uid);
-  //   await setDoc(
-  //     docRef,
-  //     {
-  //       score: newScore,
-  //       habits: newHabits,
-  //       filters: newFilters,
-  //     },
-  //     { merge: true }
-  //   );
-  // }
+  useEffect(() => {
+    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    setTimeout(() => {
+      setAllowSave(true);
+    }, 3000);
+  }, []);
 
   async function saveFilters(newFilters = filters) {
-    if (!user) return;
+    if (!user || !allowSave) return;
     const docRef = doc(db, "users", user.uid);
 
     const encryptedResponse = await fetch("/api/encrypt", {
@@ -191,7 +186,7 @@ export default function AuthContextProvider({ children }) {
   }
 
   async function saveHabits(newHabits = habits) {
-    if (!user) return;
+    if (!user || !allowSave) return;
     const docRef = doc(db, "users", user.uid);
 
     const encryptedResponse = await fetch("/api/encrypt", {
@@ -216,7 +211,7 @@ export default function AuthContextProvider({ children }) {
   }
 
   async function saveScore(newScore = score) {
-    if (!user) return;
+    if (!user || !allowSave) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
       docRef,
@@ -228,7 +223,7 @@ export default function AuthContextProvider({ children }) {
   }
 
   async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled, newDate = lastLoginDate) {
-    if (!user) return;
+    if (!user || !allowSave) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
       docRef,
