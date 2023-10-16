@@ -1,6 +1,6 @@
 {
   "name": "habit-journey",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,6 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "firebase": "^9.9.1",
-    "husky": "^8.0.3",
     "next": "13.5.4",
     "next-auth": "^4.23.2",
     "react": "^18",
@@ -23,10 +22,10 @@
     "@whiterussianstudio/tailwind-easing": "^1.0.0",
     "autoprefixer": "^10",
     "encoding": "^0.1.13",
+    "husky": "^8.0.3",
     "postcss": "^8",
     "tailwindcss": "^3"
   },
-
   "husky": {
     "hooks": {
       "pre-commit": "npm --no-git-tag-version version patch && git add ."
