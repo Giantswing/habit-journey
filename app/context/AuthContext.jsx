@@ -7,9 +7,6 @@ import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
 
-import HexEncode from "../utils/hexEncode";
-import encryptHabits from "../utils/encrypt";
-
 export const AuthContext = createContext(null);
 
 export default function AuthContextProvider({ children }) {
@@ -21,6 +18,8 @@ export default function AuthContextProvider({ children }) {
   const [currentHabitType, setCurrentHabitType] = useState("positive");
   const [lastLoginDate, setLastLoginDate] = useState(null);
   const decryptKey = useRef(null);
+
+  const CryptoJS = require("crypto-js");
 
   const defaultFilters = [
     {
@@ -114,20 +113,41 @@ export default function AuthContextProvider({ children }) {
 
     const keyRef = doc(db, "server", "data");
     const keySnap = await getDoc(keyRef);
+    const key = keySnap.get("key");
 
-    if (keySnap.exists()) {
-      const key1 = keySnap.get("key1");
-      const key2 = keySnap.get("key2");
-      const key3 = keySnap.get("key3");
+    const datat = JSON.stringify({ data: "test", key: key });
+    // const datat = {
+    //   data: "test",
+    //   key: key,
+    // };
+    console.log("Request data:", datat);
 
-      //console.log(userId);
-      //var resultkey = (key1 * key2 * key3) / userId;
-      var resultkey = HexEncode((key1 * key2 * key3 + 12345) ^ 3);
-      resultkey = "" + resultkey + userId + parseInt(resultkey * 4 - 27);
-      resultkey = resultkey.slice(0, 5) + resultkey.slice(10, 15) + resultkey.slice(8, 14) + resultkey.slice(2, 7);
+    const test = await fetch("/api/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: datat,
+    });
 
-      decryptKey.current = resultkey;
-    }
+    // console.log("Response status:", test.status);
+    console.log("Response text:", await test.text());
+
+    // const responseData = await test.text();
+    // console.log(responseData);
+
+    // const response = await fetch("/api/encrypt", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     data: JSON.stringify(tempHabits),
+    //   }),
+    // });
+
+    // const encryptedData = await response.json();
+    // console.log(encryptedData);
   }
 
   function refreshHabitIterations(tempHabits) {
@@ -167,12 +187,12 @@ export default function AuthContextProvider({ children }) {
   async function saveHabits(newHabits = habits) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
-    const encryptedHabits = await encryptHabits(newHabits, decryptKey.current);
+    // const encryptedHabits = await encryptHabits(newHabits, decryptKey.current);
 
     await setDoc(
       docRef,
       {
-        habits: encryptedHabits,
+        habits: newHabits,
       },
       { merge: true }
     );
