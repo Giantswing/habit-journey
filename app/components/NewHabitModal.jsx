@@ -48,6 +48,12 @@ export default function NewHabitModal() {
     });
   }
 
+  function deleteHabit() {
+    const updatedHabits = habits.filter((habit) => habit.id !== newHabit.id);
+    setHabits(updatedHabits);
+    closeModal();
+  }
+
   function addNewHabit() {
     //Verify if the habit is valid
     var anyError = false;
@@ -203,9 +209,15 @@ export default function NewHabitModal() {
         </div>
       )}
 
-      <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-900">
+      <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-500">
         {editMode ? "Edit" : "Add"} {currentHabitType} habit
       </button>
+
+      {editMode && (
+        <button onClick={deleteHabit} className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md">
+          Delete habit
+        </button>
+      )}
     </CustomModal>
   );
 }
