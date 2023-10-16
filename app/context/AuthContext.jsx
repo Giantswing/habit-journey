@@ -70,11 +70,28 @@ export default function AuthContextProvider({ children }) {
     const docRef = doc(db, "users", userId);
     const docSnap = await getDoc(docRef);
 
+    const keyRef = doc(db, "server", "data");
+    const keySnap = await getDoc(keyRef);
+    const fireKey = keySnap.get("key");
+    decryptKey.current = fireKey;
+
     if (!docSnap.exists()) return;
 
     var tempHabits = docSnap.data().habits;
     if (tempHabits) {
-      setHabits(docSnap.data().habits);
+      const decryptedData = await fetch("/api/decrypt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: tempHabits,
+        }),
+      });
+
+      const decryptedHabits = await decryptedData.text();
+
+      setHabits(JSON.parse(decryptedHabits));
     }
 
     if (docSnap.data().score) {
@@ -82,7 +99,19 @@ export default function AuthContextProvider({ children }) {
     }
 
     if (docSnap.data().filters) {
-      setFilters(docSnap.data().filters);
+      const decryptedData = await fetch("/api/decrypt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: docSnap.data().filters,
+        }),
+      });
+
+      const decryptedFilters = await decryptedData.text();
+
+      setFilters(JSON.parse(decryptedFilters));
     } else {
       setFilters(defaultFilters);
     }
@@ -110,44 +139,6 @@ export default function AuthContextProvider({ children }) {
     } else {
       setLastLoginDate(parseInt(new Date().getDate()));
     }
-
-    const keyRef = doc(db, "server", "data");
-    const keySnap = await getDoc(keyRef);
-    const key = keySnap.get("key");
-
-    const datat = JSON.stringify({ data: "test", key: key });
-    // const datat = {
-    //   data: "test",
-    //   key: key,
-    // };
-    console.log("Request data:", datat);
-
-    const test = await fetch("/api/test", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: datat,
-    });
-
-    // console.log("Response status:", test.status);
-    console.log("Response text:", await test.text());
-
-    // const responseData = await test.text();
-    // console.log(responseData);
-
-    // const response = await fetch("/api/encrypt", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     data: JSON.stringify(tempHabits),
-    //   }),
-    // });
-
-    // const encryptedData = await response.json();
-    // console.log(encryptedData);
   }
 
   function refreshHabitIterations(tempHabits) {
@@ -175,10 +166,23 @@ export default function AuthContextProvider({ children }) {
   async function saveFilters(newFilters = filters) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
+
+    const encryptedResponse = await fetch("/api/encrypt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: JSON.stringify(newFilters),
+      }),
+    });
+
+    const encryptedFilters = await encryptedResponse.text();
+
     await setDoc(
       docRef,
       {
-        filters: newFilters,
+        filters: encryptedFilters,
       },
       { merge: true }
     );
@@ -187,12 +191,23 @@ export default function AuthContextProvider({ children }) {
   async function saveHabits(newHabits = habits) {
     if (!user) return;
     const docRef = doc(db, "users", user.uid);
-    // const encryptedHabits = await encryptHabits(newHabits, decryptKey.current);
+
+    const encryptedResponse = await fetch("/api/encrypt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: JSON.stringify(newHabits),
+      }),
+    });
+
+    const encryptedHabits = await encryptedResponse.text();
 
     await setDoc(
       docRef,
       {
-        habits: newHabits,
+        habits: encryptedHabits,
       },
       { merge: true }
     );
