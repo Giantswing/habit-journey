@@ -38,6 +38,7 @@ export default function NewHabitModal() {
   const router = useRouter();
 
   function resetNewHabit() {
+    console.log("resetting habit");
     setNewHabit({
       id: parseInt(Date.now().toString().slice(-5)),
       title: "",
@@ -114,7 +115,10 @@ export default function NewHabitModal() {
       setHabits((prevHabits) => {
         return prevHabits.map((habit) => {
           if (habit.id === newHabit.id) {
-            habit = newHabit;
+            habit = {
+              ...newHabit,
+              duration: parseInt(newHabit.duration * 60),
+            };
           }
           return habit;
         });
@@ -148,12 +152,13 @@ export default function NewHabitModal() {
   }, [selectedModalFilters]);
 
   useEffect(() => {
-    resetNewHabit();
-  }, [showHabitModal]);
-
-  useEffect(() => {
     if (editMode && habitToEdit) {
-      setNewHabit(habitToEdit);
+      setNewHabit({
+        ...habitToEdit,
+        duration: habitToEdit.duration / 60,
+      });
+      console.log(habitToEdit);
+
       setSelectedModalFilters({
         positive: habitToEdit.category,
         negative: habitToEdit.category,
@@ -161,7 +166,7 @@ export default function NewHabitModal() {
     } else {
       resetNewHabit();
     }
-  }, [editMode, habitToEdit]);
+  }, [editMode, habitToEdit, router.asPath]);
 
   return (
     <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `Edit ${habitToEdit.title}` : "Add new habit"}>
@@ -214,15 +219,15 @@ export default function NewHabitModal() {
         </div>
       )}
 
-      <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-500">
-        {editMode ? "Edit" : "Add"} {currentHabitType} habit
-      </button>
-
       {editMode && (
         <button onClick={deleteHabit} className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md">
           Delete habit
         </button>
       )}
+
+      <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-500">
+        {editMode ? "Edit" : "Add"} {currentHabitType} habit
+      </button>
     </CustomModal>
   );
 }

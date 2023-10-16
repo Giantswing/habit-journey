@@ -186,7 +186,7 @@ export default function Habit({ habit }) {
         className="absolute bottom-0 text-xl cursor-pointer w-9 text-pale-600 dark:text-pale-200 right-1 aspect-square"
         onClick={() => {
           setEditMode(true);
-          router.push("/?habit=true");
+          router.push("?habit=true", { shallow: true, scroll: false });
           setHabitToEdit(habit);
         }}
       >

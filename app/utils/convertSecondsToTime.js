@@ -18,7 +18,8 @@ function convertSecondsToTime(seconds) {
         result += Math.floor(seconds / 60) + "m ";
         seconds = seconds % 60;
     }
-    result += seconds + "s";
+    if (seconds > 0)
+        result += seconds + "s";
 
     return result;
 }
