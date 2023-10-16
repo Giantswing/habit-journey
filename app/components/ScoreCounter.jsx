@@ -1,6 +1,6 @@
 import { useAuthContext } from "../context/AuthContext";
 import { useEffect, useState } from "react";
-import { PiCoinsDuotone } from "react-icons/pi";
+import { PiCoinsDuotone, PiGearDuotone } from "react-icons/pi";
 
 export default function ScoreCounter() {
   const [displayedScore, setDisplayedScore] = useState(0);
@@ -45,15 +45,17 @@ export default function ScoreCounter() {
   }, [displayedScore, score]);
 
   return (
-    <button
-      onClick={() => setShowEditScoreModal(true)}
-      className={`flex items-center
-     font-bold text-6xl ${scoreState === "positive" && "text-green-500"} ${scoreState === "negative" && "text-red-500"}
+    <button onClick={() => setShowEditScoreModal(true)} className="flex items-center gap-4">
+      <div
+        className={`flex items-center
+     font-bold text-8xl ${scoreState === "positive" && "text-green-500"} ${scoreState === "negative" && "text-red-500"}
       ${scoreState === "neutral" && "text-pale-600 dark:text-pale-300"}
     `}
-    >
-      {parseInt(displayedScore)}
-      <PiCoinsDuotone className="inline-block scale-75" />
+      >
+        {parseInt(displayedScore)}
+        <PiCoinsDuotone className="inline-block scale-75" />
+      </div>
+      <PiGearDuotone className="text-xl text-pale-700 dark:text-pale-400" />
     </button>
   );
 }

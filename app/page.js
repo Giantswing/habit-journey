@@ -88,7 +88,7 @@ export default function Home() {
               setSelected={setSelectedFilters}
               isSwitching={isSwitching}
             />
-            <button onClick={() => setShowEditFiltersModal(true)} className="dark:text-pale-300">
+            <button onClick={() => setShowEditFiltersModal(true)} className="text-pale-700 dark:text-pale-300">
               <PiGearDuotone className="inline-block w-6 h-6" />
             </button>
           </div>

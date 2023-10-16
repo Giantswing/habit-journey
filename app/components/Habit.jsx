@@ -45,13 +45,17 @@ export default function Habit({ habit }) {
     if (habit.unlimited || habit.maxIterations === 0) {
       return <IoIosInfinite />;
     } else {
-      var iterations = [];
-      for (var i = 0; i < habit.maxIterations; i++) {
-        if (i < habit.iterations) {
-          iterations.push(<BsCircleFill key={i} />);
-        } else {
-          iterations.push(<BsCircle key={i} />);
+      if (habit.maxIterations < 6) {
+        var iterations = [];
+        for (var i = 0; i < habit.maxIterations; i++) {
+          if (i < habit.iterations) {
+            iterations.push(<BsCircleFill key={i} />);
+          } else {
+            iterations.push(<BsCircle key={i} />);
+          }
         }
+      } else {
+        iterations = `${habit.iterations} / ${habit.maxIterations}`;
       }
 
       return iterations;
@@ -122,7 +126,7 @@ export default function Habit({ habit }) {
       key={myHabit.id}
       className={`transform rounded-md overflow-hidden bg-gradient-to-t relative p-1 pl-5 mb-3 border before:content-[''] before:w-2  before:h-auto  
       to-white dark:to-pale-800 before:absolute before:top-0 before:bottom-0 before:left-0
-      ${habit.type === "positive" ? "before:bg-green-600  from-emerald-50 dark:from-emerald-900 " : "before:bg-red-600 from-red-50 dark:from-red-950"} 
+      ${habit.type === "positive" ? "before:bg-green-600  from-emerald-50 dark:from-emerald-950 " : "before:bg-red-600 from-red-50 dark:from-red-950"} 
        ${isPressed ? "scale-90 translate-y-1 " : ""} 
        ${!myHabit.enabled ? "opacity-80 saturate-0" : ""}
        ${shouldWait ? "opacity-100 saturate-50 brightness-95" : ""}
@@ -134,7 +138,9 @@ export default function Habit({ habit }) {
           changeScore();
         }}
       >
-        <div className={`mb-1 font-semibold ${habit.type === "positive" ? "text-green-600" : "text-red-600"}`}>{habit.title}</div>
+        <div className={`mb-1 font-semibold ${habit.type === "positive" ? "text-green-600 dark:text-green-500" : "text-red-600 dark:text-red-500"}`}>
+          {habit.title}
+        </div>
         <div className="flex gap-4">
           <div className={`font-bold flex items-center gap-1 ${habit.type === "positive" ? "text-green-600" : "text-red-600"}`}>
             <PiCoinsDuotone />
@@ -152,10 +158,10 @@ export default function Habit({ habit }) {
           )}
 
           <div
-            className={`flex items-center gap-1 
+            className={`flex items-center gap-1
           ${habit.type === "positive" ? "text-green-600" : "text-red-600"}`}
           >
-            {displayIterations()}
+            <span className="flex items-center gap-1 font-bold">{displayIterations()}</span>
           </div>
         </div>
       </div>
