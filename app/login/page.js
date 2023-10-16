@@ -22,32 +22,40 @@ export default function LoginPage() {
       const docRef = doc(db, "users", result.user.uid);
       const docSnap = await getDoc(docRef);
 
-      if (!docSnap.exists()) return;
+      if (docSnap.exists()) {
 
-      await setDoc(
-        docRef,
-        {
-          name: result.user.displayName,
-          email: result.user.email,
-        },
-        { merge: true }
-      );
+        await setDoc(
+          docRef,
+          {
+            name: result.user.displayName,
+            email: result.user.email,
+          },
+          { merge: true }
+        );
 
+        if (!docSnap.data().score) {
+          await setDoc(docRef, {
+            score: 0,
+            theme: 'light',
+            soundEnabled: true,
+            lastLoginDate: parseInt(new Date().getDate()),
+          }, { merge: true });
+        }
+      } else {
+        await setDoc(
+          docRef,
+          {
+            name: result.user.displayName,
+            email: result.user.email,
+            score: 0,
+            theme: 'light',
+            soundEnabled: true,
+            lastLoginDate: parseInt(new Date().getDate()),
 
-      if (!docSnap.data().score) {
-        await setDoc(docRef, {
-          score: 0,
-          theme: 'light',
-          soundEnabled: true,
-          lastLoginDate: parseInt(new Date().getDate()),
-        }, { merge: true });
+          },
+          { merge: true }
+        );
       }
-
-      /*
-      if (!docSnap.data().theme) {
-        await setDoc(docRef, { theme: 'light' }, { merge: true });
-      }*/
-
       router.push("/");
     });
   };
