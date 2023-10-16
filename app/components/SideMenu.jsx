@@ -2,6 +2,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "../context/AuthContext";
 import Image from "next/image";
 import Toggle from "./Toggle";
+import AppLogo from "./AppLogo";
 
 export default function SideMenu({ showSideMenu, setShowSideMenu }) {
   const { user, logout, darkMode, setDarkMode, soundEnabled, setSoundEnabled } = useAuthContext();
@@ -20,7 +21,7 @@ export default function SideMenu({ showSideMenu, setShowSideMenu }) {
         </div>
 
         <div className="relative flex flex-col items-center gap-4 pb-4 mb-8 border-b border-pale-600">
-          <Image src="/habit-journey-logo.png" alt="Habit Journey Logo" width={60} height={60} className="mb-5" />
+          <AppLogo />
           <h2 className="text-4xl font-semibold text-center text-white uppercase">Welcome back, {user?.displayName}</h2>
           <h4 className="text-lg text-center text-pale-400 ">{user?.email}</h4>
         </div>

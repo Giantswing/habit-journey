@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
+import getVersion from "../utils/getVersion";
 
 export const AuthContext = createContext(null);
 
@@ -19,6 +20,7 @@ export default function AuthContextProvider({ children }) {
   const [lastLoginDate, setLastLoginDate] = useState(null);
   const decryptKey = useRef(null);
   const [allowSave, setAllowSave] = useState(false);
+  const version = getVersion();
 
   const CryptoJS = require("crypto-js");
 
@@ -64,7 +66,6 @@ export default function AuthContextProvider({ children }) {
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
-  const [osDefaultTheme, setOsDefaultTheme] = useState(false); // Initialize to false as an assumption
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   async function loadData({ userId }) {
@@ -321,6 +322,7 @@ export default function AuthContextProvider({ children }) {
         logout,
         showEditScoreModal,
         setShowEditScoreModal,
+        version,
       }}
     >
       {children}
