@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'pale': colors.zinc,
+        'pale': colors.stone,
       }
     },
   },

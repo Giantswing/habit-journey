@@ -17,6 +17,7 @@ import HabitList from "./components/HabitList";
 import NewFilterList from "./components/NewFilterList";
 import EditFiltersModal from "./components/EditFiltersModal";
 import SideMenu from "./components/SideMenu";
+import EditScoreModal from "./components/EditScoreModal";
 
 export default function Home() {
   const {
@@ -61,7 +62,7 @@ export default function Home() {
     <>
       <main className={`relative mb-24 ${darkMode ? "dark" : ""}`}>
         <div className="p-4">
-          <section className="flex items-center justify-between pb-2 mb-4 border-b dark:border-pale-600">
+          <section className="flex items-center justify-between pb-2 mb-4 border-b border-pale-300 dark:border-pale-600">
             <ScoreCounter />
 
             <button
@@ -76,7 +77,10 @@ export default function Home() {
 
           <SideMenu setShowSideMenu={setShowSideMenu} showSideMenu={showSideMenu} />
 
+          <NewHabitModal />
           <EditFiltersModal />
+          <EditScoreModal />
+
           <div className="flex items-start gap-3">
             <NewFilterList
               getter={filters}
@@ -104,10 +108,9 @@ export default function Home() {
           </button>
         </div>
 
-        <NewHabitModal />
         <SwitchButton isSwitching={isSwitching} setIsSwitching={setIsSwitching} />
 
-        <div className="fixed inset-0 bg-pale-50 dark:bg-pale-900 z-[-100]">
+        <div className="fixed inset-0 bg-pale-50 dark:bg-pale-900 z-[-100]  duration-1000 ">
 
         </div>
       </main>

@@ -2,6 +2,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { useState, useEffect, useRef } from "react";
 
 import Toggle from "./Toggle";
+import CustomModal from "./CustomModal";
 
 export default function EditFiltersModal() {
   const { filters, setFilters, showEditFiltersModal, setShowEditFiltersModal, habits, setHabits } = useAuthContext();
@@ -152,130 +153,115 @@ export default function EditFiltersModal() {
   }, [selectedFilter]);
 
   return (
-    <>
-      <div
-        className={`${showEditFiltersModal ? "scale-100" : "scale-0"} 
-        fixed p-5 pb-2 w-[97%] max-w-md top-1/2 border left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-pale-50 dark:bg-pale-800 dark:border-pale-700 rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100`}
-      >
-        <h2 className={`pb-3 mb-4 border-b border-pale-500 font-semibold text-center dark:text-pale-100`}>Add or Edit filters</h2>
+    <CustomModal displayState={showEditFiltersModal} onClose={closeModal} title="Add or Edit filters">
+      <div className="mb-4">
+        <Toggle getter={isEditing} setter={setIsEditing} firstOption="Add filter" secondOption="Edit existing" />
+      </div>
 
-        <div className="mb-4">
-          <Toggle getter={isEditing} setter={setIsEditing} firstOption="Add filter" secondOption="Edit existing" />
-        </div>
+      <div className="flex flex-col">
+        <div className="flex flex-col mb-4">
+          {isEditing && (
+            <>
+              <select
+                className="p-2 mb-4 border rounded-md dark:bg-pale-800 dark:text-white"
+                value={selectedFilter}
+                onChange={(e) => {
+                  const selectedValue = JSON.parse(e.target.value);
+                  setSelectedFilter(selectedValue);
+                  setFilterName(selectedValue.title);
+                }}
+              >
+                <option value="" hidden>
+                  Select filter to edit...
+                </option>
+                {filters
+                  .filter((filter, title, type) => filter.title != "all")
+                  .map((filter) => (
+                    <option
+                      className={`font-semibold ${filter.type === "negative" ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"}`}
+                      key={filter.title + filter.type}
+                      value={JSON.stringify({
+                        title: filter.title,
+                        type: filter.type,
+                      })}
+                    >
+                      {filter.title.charAt(0).toUpperCase() + filter.title.slice(1)}
+                    </option>
+                  ))}
+              </select>
+            </>
+          )}
 
-        <div className="flex flex-col">
-          <div className="flex flex-col mb-4">
-            {isEditing && (
-              <>
-                <select
-                  className="p-2 mb-4 border rounded-md dark:bg-pale-800 dark:text-white"
-                  value={selectedFilter}
-                  onChange={(e) => {
-                    const selectedValue = JSON.parse(e.target.value);
-                    setSelectedFilter(selectedValue);
-                    setFilterName(selectedValue.title);
-                  }}
-                >
-                  <option value="" hidden>
-                    Select filter to edit...
-                  </option>
-                  {filters
-                    .filter((filter, title, type) => filter.title != "all")
-                    .map((filter) => (
-                      <option
-                        className={`font-semibold ${filter.type === "negative" ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"}`}
-                        key={filter.title + filter.type}
-                        value={JSON.stringify({
-                          title: filter.title,
-                          type: filter.type,
-                        })}
-                      >
-                        {filter.title.charAt(0).toUpperCase() + filter.title.slice(1)}
-                      </option>
-                    ))}
-                </select>
-              </>
-            )}
-
-            {((isEditing && selectedFilter != "") || !isEditing) && (
-              <div className="flex flex-col gap-1">
-                {isEditing && (
-                  <div
-                    className="w-full relative mb-4
+          {((isEditing && selectedFilter != "") || !isEditing) && (
+            <div className="flex flex-col gap-1">
+              {isEditing && (
+                <div
+                  className="w-full relative mb-4
                     before:cotent-[''] before:absolute before:top-3 before:left-0 before:right-0 before:z-[-1] 
                     before:h-1 before:bg-pale-300 dark:before:bg-pale-600"
-                  >
-                    <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-pale-50 dark:bg-pale-800 dark:text-white">
-                      Editing {selectedFilter.title}
-                    </h3>
-                  </div>
-                )}
-                <div className="flex items-center gap-2 mb-4">
-                  <label htmlFor="filterTitle" className="w-20 dark:text-pale-100">
-                    Name
-                  </label>
-                  <input
-                    className="w-full p-2 border rounded-md border-pale-400 dark:bg-pale-700 dark:text-white"
-                    name="filterTitle"
-                    type="text"
-                    value={filterName}
-                    onChange={(e) => {
-                      var text = e.target.value;
-                      text = text.replace(/[^a-zA-Z0-9 ]/g, "");
-                      text = text.toLowerCase();
-                      setFilterName(text);
-                    }}
-                  />
+                >
+                  <h3 className="relative inline pr-4 mb-2 font-semibold text-center bg-pale-50 dark:bg-pale-800 dark:text-white">
+                    Editing {selectedFilter.title}
+                  </h3>
                 </div>
+              )}
+              <div className="flex items-center gap-2 mb-4">
+                <label htmlFor="filterTitle" className="w-20 dark:text-pale-100">
+                  Name
+                </label>
+                <input
+                  className="w-full p-2 border rounded-md border-pale-400 dark:bg-pale-700 dark:text-white"
+                  name="filterTitle"
+                  type="text"
+                  value={filterName}
+                  onChange={(e) => {
+                    var text = e.target.value;
+                    text = text.replace(/[^a-zA-Z0-9 ]/g, "");
+                    text = text.toLowerCase();
+                    setFilterName(text);
+                  }}
+                />
+              </div>
 
-                <div className="flex items-center gap-2 mb-10">
-                  <label htmlFor="filterType" className="w-20 dark:text-pale-100">
-                    Type
-                  </label>
-                  <Toggle getter={filterType} setter={setFilterType} firstOption="Positive" secondOption="Negative" type="greenred" />
-                </div>
+              <div className="flex items-center gap-2 mb-10">
+                <label htmlFor="filterType" className="w-20 dark:text-pale-100">
+                  Type
+                </label>
+                <Toggle getter={filterType} setter={setFilterType} firstOption="Positive" secondOption="Negative" type="greenred" />
+              </div>
 
-                {isEditing && (
-                  <>
-                    <button className="w-full p-2 mb-4 text-white bg-red-600 rounded-md" onClick={deleteFilter}>
-                      Delete
-                    </button>
-
-                    <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={editFilter}>
-                      Edit {selectedFilter.title}
-                    </button>
-                  </>
-                )}
-
-                {!isEditing && (
-                  <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={addNewFilter}>
-                    Add new filter
+              {isEditing && (
+                <>
+                  <button className="w-full p-2 mb-4 text-white bg-red-600 rounded-md" onClick={deleteFilter}>
+                    Delete
                   </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
 
-        {auxInfo.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {auxInfo.map((info, index) => (
-              <div className="text-xs text-red-600">
-                {info}
-                {index !== auxInfo.length - 1 && ", "}
-              </div>
-            ))}
-          </div>
-        )}
+                  <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={editFilter}>
+                    Edit {selectedFilter.title}
+                  </button>
+                </>
+              )}
+
+              {!isEditing && (
+                <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={addNewFilter}>
+                  Add new filter
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-      <div
-        onClick={() => {
-          closeModal();
-        }}
-        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-pale-900  ${
-          showEditFiltersModal ? "bg-opacity-50 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
-        }`}
-      ></div>
-    </>
+
+      {auxInfo.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-3">
+          {auxInfo.map((info, index) => (
+            <div className="text-xs text-red-600">
+              {info}
+              {index !== auxInfo.length - 1 && ", "}
+            </div>
+          ))}
+        </div>
+      )}
+    </CustomModal>
   );
 }

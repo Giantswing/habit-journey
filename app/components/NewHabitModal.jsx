@@ -3,9 +3,9 @@ import Label from "./Label";
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
-import useTimeout from "../utils/useTimeout";
-
 import { AiOutlineClose, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
+
+import CustomModal from "./CustomModal";
 
 export default function NewHabitModal() {
   const { score, habits, setHabits, currentHabitType, filters, setShowHabitModal, showHabitModal, editMode, setHabitToEdit, habitToEdit, setEditMode } =
@@ -153,104 +153,59 @@ export default function NewHabitModal() {
   }, [editMode, habitToEdit]);
 
   return (
-    <>
-      <section
-        className={`p-5 mb-4 border-2
-    ${showHabitModal ? "scale-100" : "scale-0"}
-    
-     fixed max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[97%] bg-white rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100
-     dark:bg-pale-800 dark:border-pale-700 dark:shadow-[0_-15px_50px_rgba(0,0,0,0.2)]
-    `}
-      >
-        <h2
-          className={`pb-3 mb-4 border-b font-semibold ${
-            currentHabitType == "positive" ? "border-green-700 text-green-700 dark:text-green-500" : "border-red-700 text-red-700 dark:text-red-500"
-          } text-center`}
-        >
-          {editMode ? "Edit" : "Add new"} {currentHabitType} habit
-        </h2>
-        <button
-          onClick={() => {
-            closeModal();
-          }}
-          className="absolute top-4 right-4 text-pale-600"
-        >
-          <AiOutlineClose className="text-xl" />
-        </button>
+    <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `Edit ${habitToEdit.title}` : "Add new habit"}>
+      <div className="flex flex-col gap-3">
+        <Label name="title" type="text" setNewHabit={setNewHabit} newHabit={newHabit} />
 
-        <button
-          onClick={() => {
-            const updatedHabits = habits.filter((habit) => habit.id !== newHabit.id);
-            setHabits(updatedHabits);
-            closeModal();
-          }}
-          className={`absolute top-4 left-4 text-red-600 ${editMode ? "" : "hidden"}`}
-        >
-          <AiFillDelete className="text-xl" />
-        </button>
-
-        <div className="flex flex-col gap-3">
-          <Label name="title" type="text" setNewHabit={setNewHabit} newHabit={newHabit} />
-
-          <div className="flex gap-4">
-            <Label type="number" name="cost" setNewHabit={setNewHabit} newHabit={newHabit} />
-            <Label type="number" name="duration" tip="in minutes" setNewHabit={setNewHabit} newHabit={newHabit} />
-          </div>
-
-          <div>
-            <label className="block mb-2 text-xs dark:text-pale-50">Habit category</label>
-            {/* <FilterList mode="modal" newHabit={newHabit} setNewHabit={setNewHabit} /> */}
-            <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
-          </div>
-
-          <div className={`transition-all p-3 border-pale-300 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
-            <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2 dark:bg-pale-700 dark:border-pale-900`}>
-              <button
-                onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}
-                className={`relative w-8 h-5 duration-150 border-2 border-gray-600 dark:border-gray-400 rounded-md appearance-none active:scale-50 ${
-                  newHabit.unlimited ? "bg-pale-600 dark:bg-pale-50 border-transparent" : "bg-white dark:bg-pale-700"
-                }`}
-              >
-                {newHabit.unlimited && <AiOutlineCheck className="w-full text-3xl text-center text-white -translate-y-2 dark:text-pale-900" />}
-              </button>
-
-              <label htmlFor="unlimited" className="text-md dark:text-pale-50">
-                Unlimited uses per day
-              </label>
-            </div>
-            {!newHabit.unlimited && (
-              <div className="flex gap-4">
-                <Label disabled={!editMode} type="number" name="iterations" setNewHabit={setNewHabit} newHabit={newHabit} />
-                <Label type="number" name="maxIterations" setNewHabit={setNewHabit} newHabit={newHabit} />
-              </div>
-            )}
-          </div>
+        <div className="flex gap-4">
+          <Label type="number" name="cost" setNewHabit={setNewHabit} newHabit={newHabit} />
+          <Label type="number" name="duration" tip="in minutes" setNewHabit={setNewHabit} newHabit={newHabit} />
         </div>
 
-        {auxInfo.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {auxInfo.map((info, index) => (
-              <div className="text-xs text-red-600">
-                {info}
-                {index !== auxInfo.length - 1 && ", "}
-              </div>
-            ))}
+        <div>
+          <label className="block mb-2 text-xs dark:text-pale-50">Habit category</label>
+          {/* <FilterList mode="modal" newHabit={newHabit} setNewHabit={setNewHabit} /> */}
+          <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
+        </div>
+
+        <div className={`transition-all p-3 border-pale-300 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
+          <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2 dark:bg-pale-700 dark:border-pale-900`}>
+            <button
+              onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}
+              className={`relative w-8 h-5 duration-150 border-2 border-gray-600 dark:border-gray-400 rounded-md appearance-none active:scale-50 ${
+                newHabit.unlimited ? "bg-pale-600 dark:bg-pale-50 border-transparent" : "bg-white dark:bg-pale-700"
+              }`}
+            >
+              {newHabit.unlimited && <AiOutlineCheck className="w-full text-3xl text-center text-white -translate-y-2 dark:text-pale-900" />}
+            </button>
+
+            <label htmlFor="unlimited" className="text-md dark:text-pale-50">
+              Unlimited uses per day
+            </label>
           </div>
-        )}
+          {!newHabit.unlimited && (
+            <div className="flex gap-4">
+              <Label disabled={!editMode} type="number" name="iterations" setNewHabit={setNewHabit} newHabit={newHabit} />
+              <Label type="number" name="maxIterations" setNewHabit={setNewHabit} newHabit={newHabit} />
+            </div>
+          )}
+        </div>
+      </div>
 
-        <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-900">
-          {editMode ? "Edit" : "Add"} {currentHabitType} habit
-        </button>
-      </section>
+      {auxInfo.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-3">
+          {auxInfo.map((info, index) => (
+            <div className="text-xs text-red-600">
+              {info}
+              {index !== auxInfo.length - 1 && ", "}
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div
-        onClick={() => {
-          closeModal();
-        }}
-        className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-pale-900  ${
-          showHabitModal ? "block bg-opacity-50 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
-        }`}
-      ></div>
-    </>
+      <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-900">
+        {editMode ? "Edit" : "Add"} {currentHabitType} habit
+      </button>
+    </CustomModal>
   );
 }

@@ -5,7 +5,7 @@ import { PiCoinsDuotone } from "react-icons/pi";
 export default function ScoreCounter() {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreState, setScoreState] = useState("neutral");
-  const { score, soundEnabled } = useAuthContext();
+  const { score, soundEnabled, showEditScoreModal, setShowEditScoreModal } = useAuthContext();
   const audio = new Audio("coin1.ogg");
 
   var transitionAmount = 1;
@@ -45,7 +45,8 @@ export default function ScoreCounter() {
   }, [displayedScore, score]);
 
   return (
-    <div
+    <button
+      onClick={() => setShowEditScoreModal(true)}
       className={`flex items-center
      font-bold text-6xl ${scoreState === "positive" && "text-green-500"} ${scoreState === "negative" && "text-red-500"}
       ${scoreState === "neutral" && "text-pale-600 dark:text-pale-300"}
@@ -53,6 +54,6 @@ export default function ScoreCounter() {
     >
       {parseInt(displayedScore)}
       <PiCoinsDuotone className="inline-block scale-75" />
-    </div>
+    </button>
   );
 }

@@ -59,6 +59,7 @@ export default function AuthContextProvider({ children }) {
 
   const [showHabitModal, setShowHabitModal] = useState(false);
   const [showEditFiltersModal, setShowEditFiltersModal] = useState(false);
+  const [showEditScoreModal, setShowEditScoreModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
@@ -77,6 +78,7 @@ export default function AuthContextProvider({ children }) {
 
     if (!docSnap.exists()) return;
 
+    //Loading habits
     var tempHabits = docSnap.data().habits;
     if (tempHabits) {
       const decryptedData = await fetch("/api/decrypt", {
@@ -90,8 +92,20 @@ export default function AuthContextProvider({ children }) {
       });
 
       const decryptedHabits = await decryptedData.text();
+      tempHabits = JSON.parse(decryptedHabits);
 
-      setHabits(JSON.parse(decryptedHabits));
+      if (docSnap.data().lastDate !== undefined) {
+        var oldDate = docSnap.data().lastDate;
+        var newDate = parseInt(new Date().getDate());
+        if (oldDate !== newDate) {
+          refreshHabitIterations(tempHabits);
+        }
+        setLastLoginDate(newDate);
+      } else {
+        setLastLoginDate(parseInt(new Date().getDate()));
+      }
+
+      setHabits(tempHabits);
     }
 
     if (docSnap.data().score) {
@@ -128,17 +142,6 @@ export default function AuthContextProvider({ children }) {
       console.log("Sound settings not found, defaulting to true");
       setSoundEnabled(true);
     }
-
-    if (docSnap.data().lastDate !== undefined) {
-      var oldDate = docSnap.data().lastDate;
-      var newDate = parseInt(new Date().getDate());
-      if (oldDate !== newDate) {
-        refreshHabitIterations(tempHabits);
-      }
-      setLastLoginDate(newDate);
-    } else {
-      setLastLoginDate(parseInt(new Date().getDate()));
-    }
   }
 
   function refreshHabitIterations(tempHabits) {
@@ -146,22 +149,21 @@ export default function AuthContextProvider({ children }) {
     for (var i = 0; i < tempHabits.length; i++) {
       tempHabits[i].iterations = 0;
     }
-    setHabits(tempHabits);
   }
 
-  async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
-    if (!user) return;
-    const docRef = doc(db, "users", user.uid);
-    await setDoc(
-      docRef,
-      {
-        score: newScore,
-        habits: newHabits,
-        filters: newFilters,
-      },
-      { merge: true }
-    );
-  }
+  // async function saveData(newScore = score, newHabits = habits, newFilters = filters) {
+  //   if (!user) return;
+  //   const docRef = doc(db, "users", user.uid);
+  //   await setDoc(
+  //     docRef,
+  //     {
+  //       score: newScore,
+  //       habits: newHabits,
+  //       filters: newFilters,
+  //     },
+  //     { merge: true }
+  //   );
+  // }
 
   async function saveFilters(newFilters = filters) {
     if (!user) return;
@@ -300,7 +302,6 @@ export default function AuthContextProvider({ children }) {
         setLoading,
         score,
         setScore,
-        saveData,
         loadData,
         habits,
         setHabits,
@@ -314,21 +315,17 @@ export default function AuthContextProvider({ children }) {
         setEditMode,
         habitToEdit,
         setHabitToEdit,
-
         showEditFiltersModal,
         setShowEditFiltersModal,
         selectedFilters,
         setSelectedFilters,
-
         darkMode,
         setDarkMode,
-
         soundEnabled,
         setSoundEnabled,
-
         logout,
-
-        decryptKey,
+        showEditScoreModal,
+        setShowEditScoreModal,
       }}
     >
       {children}
