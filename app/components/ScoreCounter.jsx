@@ -1,12 +1,17 @@
 import { useAuthContext } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { PiCoinsDuotone, PiGearDuotone } from "react-icons/pi";
+import Link from "next/link";
 
 export default function ScoreCounter() {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreState, setScoreState] = useState("neutral");
-  const { score, soundEnabled, showEditScoreModal, setShowEditScoreModal } = useAuthContext();
+  const { score, soundEnabled } = useAuthContext();
   const audio = new Audio("coin1.ogg");
+
+  // const searchParams = useSearchParams();
+  // const showScoreModal = searchParams.get("habit") != undefined;
+  // const router = useRouter();
 
   var transitionAmount = 1;
   const [iterations, setIterations] = useState(0);
@@ -45,7 +50,7 @@ export default function ScoreCounter() {
   }, [displayedScore, score]);
 
   return (
-    <button onClick={() => setShowEditScoreModal(true)} className="flex items-center gap-4">
+    <Link href="?score=true" className="flex items-center gap-4">
       <div
         className={`flex items-center
      font-bold text-8xl ${scoreState === "positive" && "text-green-500"} ${scoreState === "negative" && "text-red-500"}
@@ -56,6 +61,6 @@ export default function ScoreCounter() {
         <PiCoinsDuotone className="inline-block scale-75" />
       </div>
       <PiGearDuotone className="text-xl text-pale-700 dark:text-pale-400" />
-    </button>
+    </Link>
   );
 }

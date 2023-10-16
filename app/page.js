@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuthContext } from "./context/AuthContext";
 import { PiGearDuotone } from "react-icons/pi";
 import { AiOutlineMenu } from "react-icons/ai";
+import Link from "next/link";
 
 /* Firebase */
 
@@ -18,6 +19,7 @@ import NewFilterList from "./components/NewFilterList";
 import EditFiltersModal from "./components/EditFiltersModal";
 import SideMenu from "./components/SideMenu";
 import EditScoreModal from "./components/EditScoreModal";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const {
@@ -25,32 +27,31 @@ export default function Home() {
     loading,
     currentHabitType,
     setEditMode,
-    setShowHabitModal,
     filters,
     selectedFilters,
     setSelectedFilters,
-    setShowEditFiltersModal,
     darkMode
   } = useAuthContext();
+
+
   const router = useRouter();
+  const data = router.query;
+
+  if (router.query && router.query.settings != undefined)
+    console.log(data.settings);
 
   const [isSwitching, setIsSwitching] = useState(false);
-  const [showSideMenu, setShowSideMenu] = useState(false);
 
-  // function setDefaultTheme() {
-  //   if (darkMode) {
-  //     document.documentElement.classList.add("dark");
-  //   } else {
-  //     document.documentElement.classList.remove("dark");
-  //   }
-  // test
-  // }
+  const searchParams = useSearchParams();
+  const showSideMenu = searchParams.get('settings') != undefined;
+
 
   useEffect(() => {
     if (!user && !loading) {
       router.push("/login");
     }
   }, [user, loading]);
+
 
   function detectUserOSDarkMode() {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -59,7 +60,6 @@ export default function Home() {
       return false;
     }
   }
-
 
   if (loading)
     return (
@@ -76,17 +76,15 @@ export default function Home() {
           <section className="flex items-center justify-between pb-2 mb-4 border-b border-pale-300 dark:border-pale-600">
             <ScoreCounter />
 
-            <button
-              className={`
-          ${showSideMenu ? "opacity-0" : "opacity-100"}
-          dark:text-pale-50
-          `}
-              onClick={() => setShowSideMenu(true)}>
+            <Link href={`?settings=true`}
+              className={`${showSideMenu ? "opacity-0" : "opacity-100"}
+                      dark:text-pale-50`}
+            >
               <AiOutlineMenu className="inline-block w-8 h-8 duration-200 hover:opacity-50" />
-            </button>
+            </Link>
           </section>
 
-          <SideMenu setShowSideMenu={setShowSideMenu} showSideMenu={showSideMenu} />
+          <SideMenu />
 
           <NewHabitModal />
           <EditFiltersModal />
@@ -99,9 +97,9 @@ export default function Home() {
               setSelected={setSelectedFilters}
               isSwitching={isSwitching}
             />
-            <button onClick={() => setShowEditFiltersModal(true)} className="text-pale-700 dark:text-pale-300">
+            <Link href="?filter=true" className="text-pale-700 dark:text-pale-300">
               <PiGearDuotone className="inline-block w-6 h-6" />
-            </button>
+            </Link>
           </div>
           <HabitList isSwitching={isSwitching} />
 
@@ -112,7 +110,8 @@ export default function Home() {
               }`}
             onClick={() => {
               setEditMode(false);
-              setShowHabitModal(true);
+              router.push(`?habit=true`);
+              // setShowHabitModal(true);
             }}
           >
             Add new {currentHabitType} habit
@@ -128,5 +127,3 @@ export default function Home() {
     </>
   );
 }
-
-// .filter((habit) => habit.type === currentHabitType)

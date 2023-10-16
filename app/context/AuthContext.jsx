@@ -6,7 +6,6 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
-import getVersion from "../utils/getVersion";
 
 export const AuthContext = createContext(null);
 
@@ -20,7 +19,6 @@ export default function AuthContextProvider({ children }) {
   const [lastLoginDate, setLastLoginDate] = useState(null);
   const decryptKey = useRef(null);
   const [allowSave, setAllowSave] = useState(false);
-  const version = getVersion();
 
   const CryptoJS = require("crypto-js");
 
@@ -60,9 +58,6 @@ export default function AuthContextProvider({ children }) {
     negative: "all",
   });
 
-  const [showHabitModal, setShowHabitModal] = useState(false);
-  const [showEditFiltersModal, setShowEditFiltersModal] = useState(false);
-  const [showEditScoreModal, setShowEditScoreModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
@@ -305,14 +300,13 @@ export default function AuthContextProvider({ children }) {
         setCurrentHabitType,
         filters,
         setFilters,
-        showHabitModal,
-        setShowHabitModal,
+
         editMode,
         setEditMode,
+
         habitToEdit,
         setHabitToEdit,
-        showEditFiltersModal,
-        setShowEditFiltersModal,
+
         selectedFilters,
         setSelectedFilters,
         darkMode,
@@ -320,9 +314,6 @@ export default function AuthContextProvider({ children }) {
         soundEnabled,
         setSoundEnabled,
         logout,
-        showEditScoreModal,
-        setShowEditScoreModal,
-        version,
       }}
     >
       {children}

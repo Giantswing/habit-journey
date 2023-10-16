@@ -21,7 +21,7 @@ function Label({ tip, name, type = "text", setNewHabit, newHabit, disabled = fal
         onChange={(e) => {
           var newValue = e.target.value;
           if (name === "cost" || name === "duration") if (newValue < 0) newValue = 0;
-          if (name === "maxIterations" && newValue < newHabit.iterations) newValue = newHabit.iterations;
+          // if (name === "maxIterations" && newValue < newHabit.iterations) newValue = newHabit.iterations;
           setNewHabit({ ...newHabit, [name]: newValue });
           // router.push({ search: searchParams.toString() });
         }}

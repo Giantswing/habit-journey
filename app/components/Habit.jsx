@@ -9,13 +9,19 @@ import { useAuthContext } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import convertSecondsToTime from "../utils/convertSecondsToTime";
 
+import { useSearchParams, useRouter } from "next/navigation";
+
 export default function Habit({ habit }) {
-  const { score, setScore, habits, setHabits, setEditMode, setShowHabitModal, setHabitToEdit, currentHabitType } = useAuthContext();
+  const { score, setScore, habits, setHabits, setEditMode, setHabitToEdit, currentHabitType } = useAuthContext();
 
   const [shouldWait, setShouldWait] = useState(false);
   const [auxInfo, setAuxInfo] = useState("");
   const [isPressed, setIsPressed] = useState(false);
   const [myHabit, setMyHabit] = useState(habit);
+
+  const searchParams = useSearchParams();
+  const showHabitModal = searchParams.get("habit") != undefined;
+  const router = useRouter();
 
   //Change score when the habit is pressed
   function changeScore() {
@@ -180,7 +186,7 @@ export default function Habit({ habit }) {
         className="absolute bottom-0 text-xl cursor-pointer w-9 text-pale-600 dark:text-pale-200 right-1 aspect-square"
         onClick={() => {
           setEditMode(true);
-          setShowHabitModal(true);
+          router.push("/?habit=true");
           setHabitToEdit(habit);
         }}
       >

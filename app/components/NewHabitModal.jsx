@@ -3,18 +3,19 @@ import Label from "./Label";
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
-import { AiOutlineClose, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineCheck } from "react-icons/ai";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import CustomModal from "./CustomModal";
 
 export default function NewHabitModal() {
-  const { score, habits, setHabits, currentHabitType, filters, setShowHabitModal, showHabitModal, editMode, setHabitToEdit, habitToEdit, setEditMode } =
-    useAuthContext();
+  const { habits, setHabits, currentHabitType, filters, editMode, setHabitToEdit, habitToEdit, setEditMode } = useAuthContext();
 
   const [selectedModalFilters, setSelectedModalFilters] = useState({
     positive: "all",
     negative: "all",
   });
+
   const [newHabit, setNewHabit] = useState({
     id: parseInt(Date.now().toString().slice(-5)),
     title: "",
@@ -31,6 +32,10 @@ export default function NewHabitModal() {
 
   const [auxInfo, setAuxInfo] = useState([]);
   const timeoutId = useRef(null);
+
+  const searchParams = useSearchParams();
+  const showHabitModal = searchParams.get("habit") != undefined;
+  const router = useRouter();
 
   function resetNewHabit() {
     setNewHabit({
@@ -127,7 +132,7 @@ export default function NewHabitModal() {
   }
 
   function closeModal() {
-    setShowHabitModal(false);
+    router.push("/");
     setEditMode(false);
     setHabitToEdit(null);
     setSelectedModalFilters({ positive: "all", negative: "all" });

@@ -2,13 +2,19 @@ import CustomModal from "./CustomModal";
 import { useAuthContext } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 
+import { useSearchParams, useRouter } from "next/navigation";
+
 export default function EditScoreModal() {
-  const { showEditScoreModal, setShowEditScoreModal, score, setScore } = useAuthContext();
+  const { score, setScore } = useAuthContext();
   const [newScore, setNewScore] = useState(score);
   const [auxInfo, setAuxInfo] = useState([]);
 
+  const searchParams = useSearchParams();
+  const showEditScoreModal = searchParams.get("score") != undefined;
+  const router = useRouter();
+
   function closeModal() {
-    setShowEditScoreModal(false);
+    router.push("/");
     setAuxInfo([]);
   }
 

@@ -3,14 +3,19 @@ import { useState, useEffect, useRef } from "react";
 
 import Toggle from "./Toggle";
 import CustomModal from "./CustomModal";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function EditFiltersModal() {
-  const { filters, setFilters, showEditFiltersModal, setShowEditFiltersModal, habits, setHabits } = useAuthContext();
+  const { filters, setFilters, habits, setHabits } = useAuthContext();
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterType, setFilterType] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [auxInfo, setAuxInfo] = useState([]);
+
+  const searchParams = useSearchParams();
+  const showEditFiltersModal = searchParams.get("filter") != undefined;
+  const router = useRouter();
 
   const timeoutId = useRef(null);
 
@@ -130,7 +135,7 @@ export default function EditFiltersModal() {
   }
 
   function closeModal() {
-    setShowEditFiltersModal(false);
+    router.push("/");
     setIsEditing(false);
     resetFilter();
   }
