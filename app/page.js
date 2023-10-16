@@ -49,7 +49,7 @@ export default function Home() {
     if (!user && !loading) {
       router.push("/login");
     }
-  }, [user]);
+  }, [user, loading]);
 
   if (loading)
     return (
