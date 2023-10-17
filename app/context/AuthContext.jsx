@@ -278,7 +278,6 @@ export default function AuthContextProvider({ children }) {
   useEffect(() => {
     const nextLocale = language;
     startTransition(() => {
-      console.log(pathname);
       router.replace(pathname, { locale: nextLocale });
     });
   }, [language]);

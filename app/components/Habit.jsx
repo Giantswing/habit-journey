@@ -11,7 +11,10 @@ import convertSecondsToTime from "../utils/convertSecondsToTime";
 
 import { useSearchParams, useRouter } from "next/navigation";
 
+import { useTranslations } from "next-intl";
+
 export default function Habit({ habit }) {
+  const t = useTranslations("Habit");
   const { score, setScore, habits, setHabits, setEditMode, setHabitToEdit, currentHabitType } = useAuthContext();
 
   const [shouldWait, setShouldWait] = useState(false);
@@ -94,11 +97,11 @@ export default function Habit({ habit }) {
   useEffect(() => {
     var result = "";
     if (shouldWait) {
-      result = "Doing...";
+      result = t("doing");
     } else if (!myHabit.enabled) {
-      result = "Not enough points";
+      result = t("disabled");
     } else if (!myHabit.unlimited && myHabit.iterations >= myHabit.maxIterations) {
-      result = "Daily limit reached";
+      result = t("daily-limit");
     }
     setAuxInfo(result);
   }, [shouldWait, myHabit.enabled, currentHabitType, myHabit.iterations, myHabit.maxIterations]);

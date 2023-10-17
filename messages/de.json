@@ -80,5 +80,11 @@
     "spanish": "Spanisch",
     "deutsch": "Deutsch",
     "logout": "Abmelden"
+  },
+
+  "Habit": {
+    "doing": "Am machen...",
+    "disabled": "Nicht genug Punkte",
+    "daily-limit": "Tageslimit erreicht"
   }
 }
