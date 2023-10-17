@@ -1,7 +1,8 @@
 {
   "LoginPage": {
     "title": "Login to Habit Journey",
-    "loginWithGoogle": "Log in with Google"
+    "loginWithGoogle": "Log in with Google",
+    "loginWithTwitter": "Log in with Twitter"
   },
 
   "EditScoreModal": {

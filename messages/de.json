@@ -1,7 +1,8 @@
 {
   "LoginPage": {
     "title": "Anmelden bei Habit Journey",
-    "loginWithGoogle": "Mit Google anmelden"
+    "loginWithGoogle": "Mit Google anmelden",
+    "loginWithTwitter": "Mit Twitter anmelden"
   },
 
   "EditScoreModal": {
