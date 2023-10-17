@@ -25,6 +25,7 @@
     "edit-title": "Edit",
     "name": "Name",
     "name-default": "Eg: Go for a run",
+    "name-default-negative": "Eg: Eat an entire pizza",
     "cost": "Cost",
     "reward": "Reward",
     "reward-default": "How much reward?",

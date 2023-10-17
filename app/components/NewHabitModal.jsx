@@ -173,7 +173,14 @@ export default function NewHabitModal() {
   return (
     <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `${t("edit-title")} ${habitToEdit.title}` : `${t("title")}`}>
       <div className="flex flex-col gap-3">
-        <Label name="title" displayName={t("name")} displayDefault={t("name-default")} type="text" setNewHabit={setNewHabit} newHabit={newHabit} />
+        <Label
+          name="title"
+          displayName={t("name")}
+          displayDefault={currentHabitType == "positive" ? `${t("name-default")}` : `${t("name-default-negative")}`}
+          type="text"
+          setNewHabit={setNewHabit}
+          newHabit={newHabit}
+        />
 
         <div className="flex gap-4">
           <Label

@@ -25,6 +25,7 @@
     "edit-title": "Bearbeiten",
     "name": "Name",
     "name-default": "Zum Beispiel: Joggen gehen",
+    "name-default-negative": "Zum Beispiel: Rauchen",
     "cost": "Kosten",
     "reward": "Belohnung",
     "reward-default": "Wie hoch ist die Belohnung?",

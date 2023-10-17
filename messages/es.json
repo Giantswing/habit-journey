@@ -24,6 +24,7 @@
     "title": "Añadir hábito",
     "edit-title": "Editar",
     "name": "Nombre",
+    "name-default-negative": "Ej: Comer comida basura",
     "name-default": "Ej: Salir a correr",
     "cost": "Coste",
     "reward": "Recompensa",
