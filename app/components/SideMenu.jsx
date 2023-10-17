@@ -38,27 +38,29 @@ export default function SideMenu() {
           <h4 className="text-lg text-center text-pale-400 ">{user?.email}</h4>
         </div>
 
-        <div className="flex items-center gap-2 mb-8">
-          <h4 className="text-md text-white w-[50%]">{t("darkmode")}</h4>
-          <Toggle firstOption={t("off")} secondOption={t("on")} getter={darkMode} setter={setDarkMode} />
-        </div>
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center gap-2">
+            <h4 className="text-md text-white w-[50%]">{t("darkmode")}</h4>
+            <Toggle firstOption={t("off")} secondOption={t("on")} getter={darkMode} setter={setDarkMode} />
+          </div>
 
-        <div className="flex items-center gap-2 mb-8">
-          <h4 className="text-md text-white w-[50%]">{t("sound")}</h4>
-          <Toggle firstOption={t("off")} secondOption={t("on")} getter={soundEnabled} setter={setSoundEnabled} />
-        </div>
+          <div className="flex items-center gap-2">
+            <h4 className="text-md text-white w-[50%]">{t("sound")}</h4>
+            <Toggle firstOption={t("off")} secondOption={t("on")} getter={soundEnabled} setter={setSoundEnabled} />
+          </div>
 
-        <div className="flex items-center gap-2">
-          <h4 className="text-md text-white w-[50%]">{t("language")}</h4>
-          <ToggleMultiple
-            getter={language}
-            setter={setLanguage}
-            values={{
-              en: t("english"),
-              es: t("spanish"),
-              de: t("deutsch"),
-            }}
-          />
+          <div className="flex items-center gap-2">
+            <h4 className="text-md text-white w-[50%]">{t("language")}</h4>
+            <ToggleMultiple
+              getter={language}
+              setter={setLanguage}
+              values={{
+                en: t("english"),
+                es: t("spanish"),
+                de: t("deutsch"),
+              }}
+            />
+          </div>
         </div>
 
         <div className="fixed gap-4 text-xl text-center text-white uppercase left-5 right-5 bottom-10">
