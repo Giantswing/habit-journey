@@ -39,17 +39,17 @@ export default function SideMenu() {
         </div>
 
         <div className="flex items-center gap-2 mb-8">
-          <h4 className="text-lg text-white w-[50%]">{t("darkmode")}</h4>
+          <h4 className="text-md text-white w-[50%]">{t("darkmode")}</h4>
           <Toggle firstOption={t("off")} secondOption={t("on")} getter={darkMode} setter={setDarkMode} />
         </div>
 
         <div className="flex items-center gap-2 mb-8">
-          <h4 className="text-lg text-white w-[50%]">{t("sound")}</h4>
+          <h4 className="text-md text-white w-[50%]">{t("sound")}</h4>
           <Toggle firstOption={t("off")} secondOption={t("on")} getter={soundEnabled} setter={setSoundEnabled} />
         </div>
 
         <div className="flex items-center gap-2">
-          <h4 className="text-lg text-white w-[50%]">{t("language")}</h4>
+          <h4 className="text-md text-white w-[50%]">{t("language")}</h4>
           <ToggleMultiple
             getter={language}
             setter={setLanguage}

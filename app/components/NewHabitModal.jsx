@@ -200,7 +200,7 @@ export default function NewHabitModal() {
           <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
         </div>
 
-        <div className={`transition-all p-3 border-pale-300 mt-4 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
+        <div className={`transition-all p-2 border-pale-300 mt-4 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
           <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2 dark:bg-pale-700 dark:border-pale-900`}>
             <button
               onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}

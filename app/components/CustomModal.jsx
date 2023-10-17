@@ -4,7 +4,7 @@ export default function CustomModal({ children, displayState, onClose, title }) 
   return (
     <>
       <section
-        className={`p-5 mb-4 border-2
+        className={`p-3 mb-4 border-2
         ${displayState ? "scale-100" : "scale-0"}
         
          fixed max-w-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[97%] bg-white rounded-md shadow-lg z-50 transtion-transform ease-out-expo duration-100
