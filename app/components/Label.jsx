@@ -4,20 +4,20 @@ import { AiFillLock } from "react-icons/ai";
 // import { useSearchParams, useRouter } from "next/navigation";
 // import { useEffect, useState } from "react";
 
-function Label({ tip, name, type = "text", setNewHabit, newHabit, disabled = false }) {
+function Label({ tip, name, displayName = name, displayDefault = name, type = "text", setNewHabit, newHabit, disabled = false }) {
   // const searchParams = useSearchParams();
   // const router = useRouter();
 
   return (
     <div className={`flex flex-col ${disabled ? "opacity-75 cursor-none" : ""}`}>
       <label htmlFor={name} className="block mb-2 text-xs capitalize dark:text-pale-100">
-        {name} {tip && <span className="text-xs text-pale-400 dark:text-pale-50">({tip})</span>}{" "}
+        {displayName} {tip && <span className="text-xs text-pale-400 dark:text-pale-50">({tip})</span>}{" "}
         {disabled && <AiFillLock className="inline-block mb-1 ml-1 text-xs" />}
       </label>
       <input
         disabled={disabled}
         maxLength="30"
-        placeholder={`Enter ${name}`}
+        placeholder={displayDefault}
         onChange={(e) => {
           var newValue = e.target.value;
           if (name === "cost" || name === "duration") if (newValue < 0) newValue = 0;

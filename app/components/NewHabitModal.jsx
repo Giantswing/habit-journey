@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
 import { AiOutlineCheck } from "react-icons/ai";
-import { useSearchParams, useRouter } from "next/navigation";
-
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next-intl/client";
 import CustomModal from "./CustomModal";
+
+import { useTranslations } from "next-intl";
 
 export default function NewHabitModal() {
   const { habits, setHabits, currentHabitType, filters, editMode, setHabitToEdit, habitToEdit, setEditMode } = useAuthContext();
+  const t = useTranslations("HabitModal");
 
   const [selectedModalFilters, setSelectedModalFilters] = useState({
     positive: "all",
@@ -63,40 +66,39 @@ export default function NewHabitModal() {
     //Verify if the habit is valid
     var anyError = false;
     var errorMsg = [];
-    var msg = "";
 
     if (!newHabit.title || !newHabit.cost || !newHabit.duration) {
       anyError = true;
 
-      errorMsg.push("Please fill all the fields");
+      errorMsg.push(t("error-missing"));
     }
 
     if (!newHabit.unlimited && newHabit.iterations > newHabit.maxIterations) {
       anyError = true;
-      errorMsg.push("Iterations can't be greater than max iterations");
+      errorMsg.push(t("error-maxlessthanit"));
     }
     if (!newHabit.unlimited && newHabit.iterations < 0) {
       anyError = true;
-      errorMsg.push("Iterations can't be less than 0");
+      errorMsg.push(t("error-iterations"));
     }
     if (!newHabit.unlimited && newHabit.maxIterations < 1) {
       anyError = true;
-      errorMsg.push("Max iterations can't be less than 1");
+      errorMsg.push(t("error-maxIterations"));
     }
 
-    if (!newHabit.unlimited && newHabit.maxIterations > 10) {
+    if (!newHabit.unlimited && newHabit.maxIterations > 15) {
       anyError = true;
-      errorMsg.push("Max iterations can't be greater than 10");
+      errorMsg.push(t("error-maxIterationsBig"));
     }
 
     if (newHabit.cost < 1) {
       anyError = true;
-      errorMsg.push("Cost can't be less than 1");
+      errorMsg.push(t("error-cost"));
     }
 
     if (newHabit.duration < 1) {
       anyError = true;
-      errorMsg.push("Duration can't be less than 1");
+      errorMsg.push(t("error-duration"));
     }
 
     setAuxInfo(errorMsg);
@@ -169,22 +171,36 @@ export default function NewHabitModal() {
   }, [editMode, habitToEdit, router.asPath]);
 
   return (
-    <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `Edit ${habitToEdit.title}` : "Add new habit"}>
+    <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `${t("edit-title")} ${habitToEdit.title}` : `${t("title")}`}>
       <div className="flex flex-col gap-3">
-        <Label name="title" type="text" setNewHabit={setNewHabit} newHabit={newHabit} />
+        <Label name="title" displayName={t("name")} displayDefault={t("name-default")} type="text" setNewHabit={setNewHabit} newHabit={newHabit} />
 
         <div className="flex gap-4">
-          <Label type="number" name="cost" setNewHabit={setNewHabit} newHabit={newHabit} />
-          <Label type="number" name="duration" tip="in minutes" setNewHabit={setNewHabit} newHabit={newHabit} />
+          <Label
+            type="number"
+            name="cost"
+            displayName={currentHabitType == "positive" ? `${t("reward")}` : `${t("cost")}`}
+            displayDefault={currentHabitType == "positive" ? `${t("reward-default")}` : `${t("reward-default-negative")}`}
+            setNewHabit={setNewHabit}
+            newHabit={newHabit}
+          />
+          <Label
+            type="number"
+            name="duration"
+            displayName={t("duration")}
+            displayDefault={t("duration-default")}
+            setNewHabit={setNewHabit}
+            newHabit={newHabit}
+          />
         </div>
 
         <div>
-          <label className="block mb-2 text-xs dark:text-pale-50">Habit category</label>
+          <label className="block mb-2 text-xs dark:text-pale-50">{t("category")}</label>
           {/* <FilterList mode="modal" newHabit={newHabit} setNewHabit={setNewHabit} /> */}
           <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
         </div>
 
-        <div className={`transition-all p-3 border-pale-300 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
+        <div className={`transition-all p-3 border-pale-300 mt-4 dark:border-pale-900 ${!newHabit.unlimited ? "border-4" : "border-t"}`}>
           <div className={`flex items-center justify-center w-full gap-3 p-2 mb-4 -mt-8 text-center bg-white border-2 dark:bg-pale-700 dark:border-pale-900`}>
             <button
               onClick={() => setNewHabit({ ...newHabit, unlimited: !newHabit.unlimited })}
@@ -196,13 +212,28 @@ export default function NewHabitModal() {
             </button>
 
             <label htmlFor="unlimited" className="text-md dark:text-pale-50">
-              Unlimited uses per day
+              {t("unlimited")}
             </label>
           </div>
           {!newHabit.unlimited && (
             <div className="flex gap-4">
-              <Label disabled={!editMode} type="number" name="iterations" setNewHabit={setNewHabit} newHabit={newHabit} />
-              <Label type="number" name="maxIterations" setNewHabit={setNewHabit} newHabit={newHabit} />
+              <Label
+                disabled={!editMode}
+                type="number"
+                name="iterations"
+                displayName={t("iterations")}
+                displayDefault={t("iterations-default")}
+                setNewHabit={setNewHabit}
+                newHabit={newHabit}
+              />
+              <Label
+                type="number"
+                name="maxIterations"
+                displayName={t("maxIterations")}
+                displayDefault={t("iterations-default")}
+                setNewHabit={setNewHabit}
+                newHabit={newHabit}
+              />
             </div>
           )}
         </div>
@@ -221,12 +252,12 @@ export default function NewHabitModal() {
 
       {editMode && (
         <button onClick={deleteHabit} className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md">
-          Delete habit
+          {t("delete")}
         </button>
       )}
 
       <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-500">
-        {editMode ? "Edit" : "Add"} {currentHabitType} habit
+        {editMode ? `${t("edit")}` : `${t("add")}`} {currentHabitType === "positive" ? `${t("positive")}` : `${t("negative")}`}
       </button>
     </CustomModal>
   );

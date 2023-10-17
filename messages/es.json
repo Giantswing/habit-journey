@@ -1,0 +1,84 @@
+{
+  "LoginPage": {
+    "title": "Inicia sesión en Habit Journey",
+    "loginWithGoogle": "Iniciar sesión con Google"
+  },
+
+  "EditScoreModal": {
+    "title": "Editar puntuación",
+    "score": "Puntuación",
+    "update": "Actualizar puntuación"
+  },
+
+  "Home": {
+    "add-positive": "Añadir nuevo hábito positivo",
+    "add-negative": "Añadir nuevo hábito negativo",
+    "switch-positive": "Cambiar a hábitos positivos",
+    "switch-negative": "Cambiar a hábitos negativos",
+    "filter-by": "Filtrar por",
+    "no-habits": "Vaya, parece que o no tienes hábitos o que no hay ninguno que coincida con el filtro seleccionado, ¿por qué no añades uno?"
+  },
+
+  "HabitModal": {
+    "title": "Añadir hábito",
+    "edit-title": "Editar",
+    "name": "Nombre",
+    "name-default": "Ej: Salir a correr",
+    "cost": "Coste",
+    "reward": "Recompensa",
+    "reward-default": "¿Cuanto ganarás?",
+    "reward-default-negative": "¿Cuanto pagarás?",
+    "duration": "Duración (en minutos)",
+    "duration-default": "¿Cuanto tardas?",
+    "category": "Categoría",
+    "unlimited": "Usos ilimitados por día",
+    "iterations": "Usos actuales",
+    "iterations-default": "Introduce un número",
+    "maxIterations": "Usos máximos diarios",
+    "delete": "Eliminar hábito",
+    "add": "Añadir",
+    "edit": "Editar",
+    "positive": "hábito positivo",
+    "negative": "hábito negativo",
+    "error-missing": "Por favor, complete todos los campos",
+    "error-maxlessthanit": "Los usos no pueden ser mayores que los usos máximos",
+    "error-iterations": "Los usos no pueden ser menores que 0",
+    "error-maxIterations": "Los usos máximos no pueden ser menores que 1",
+    "error-maxIterationsBig": "Los usos máximos no pueden ser mayores que 15",
+    "error-cost": "El coste/recompensa no puede ser menor que 1",
+    "error-duration": "La duración no puede ser menor que 1"
+  },
+
+  "FilterModal": {
+    "title": "Agregar o editar filtros",
+    "toggle-add": "Agregar filtro",
+    "toggle-edit": "Editar filtro",
+    "name": "Nombre",
+    "type": "Tipo",
+    "name-default": "Ejemplo: Trabajo",
+    "positive": "Positivo",
+    "negative": "Negativo",
+    "add": "Agregar nuevo filtro",
+    "select": "Selecciona filtro para editar...",
+    "edit": "Editar",
+    "editing": "Editando",
+    "delete": "Eliminar filtro",
+    "error-missing": "Por favor, complete todos los campos",
+    "error-filterNameLength": "El nombre del filtro debe tener entre 1 y 12 caracteres",
+    "error-filterExisting": "El nombre del filtro ya existe",
+    "error-filter-all": "El nombre del filtro no puede ser 'all'"
+  },
+
+  "Settings": {
+    "welcome": "Bienvenido de nuevo",
+    "darkmode": "Modo oscuro",
+    "off": "Desactivado",
+    "on": "Activado",
+    "sound": "Sonidos",
+    "language": "Idioma",
+    "english": "Inglés",
+    "spanish": "Español",
+    "deutsch": "Alemán",
+    "logout": "Cerrar sesión"
+  }
+}

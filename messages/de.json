@@ -1,0 +1,84 @@
+{
+  "LoginPage": {
+    "title": "Anmelden bei Habit Journey",
+    "loginWithGoogle": "Mit Google anmelden"
+  },
+
+  "EditScoreModal": {
+    "title": "Score bearbeiten",
+    "score": "Score",
+    "update": "Score aktualisieren"
+  },
+
+  "Home": {
+    "add-positive": "Neuen positiven Gewohnheit hinzufügen",
+    "add-negative": "Neuen negativen Gewohnheit hinzufügen",
+    "switch-positive": "Zu positiven Gewohnheiten wechseln",
+    "switch-negative": "Zu negativen Gewohnheiten wechseln",
+    "filter-by": "Filtern nach",
+    "no-habits": "Hoppla, es scheint, dass du entweder keine Gewohnheiten hast oder keine dazu passen, warum fügst du nicht eine hinzu?"
+  },
+
+  "HabitModal": {
+    "title": "Gewohnheit hinzufügen",
+    "edit-title": "Bearbeiten",
+    "name": "Name",
+    "name-default": "Zum Beispiel: Joggen gehen",
+    "cost": "Kosten",
+    "reward": "Belohnung",
+    "reward-default": "Wie hoch ist die Belohnung?",
+    "reward-default-negative": "Wie hoch sind die Kosten?",
+    "duration": "Dauer (in Minuten)",
+    "duration-default": "Wie lange?",
+    "category": "Kategorie",
+    "unlimited": "Unbegrenzte tägliche Verwendung",
+    "iterations": "Aktuelle tägliche Verwendung",
+    "iterations-default": "Gib eine Zahl ein",
+    "maxIterations": "Maximale tägliche Verwendung",
+    "delete": "Gewohnheit löschen",
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "positive": "Positive Gewohnheit",
+    "negative": "Negative Gewohnheit",
+    "error-missing": "Bitte fülle alle Felder aus",
+    "error-maxlessthanit": "Iterationen dürfen nicht größer sein als maximale Iterationen",
+    "error-iterations": "Iterationen dürfen nicht kleiner als 0 sein",
+    "error-maxIterations": "Maximale Iterationen dürfen nicht kleiner als 1 sein",
+    "error-maxIterationsBig": "Maximale Iterationen dürfen nicht größer als 15 sein",
+    "error-cost": "Kosten/Belohnung dürfen nicht kleiner als 1 sein",
+    "error-duration": "Dauer darf nicht kleiner als 1 sein"
+  },
+
+  "FilterModal": {
+    "title": "Filter hinzufügen oder bearbeiten",
+    "toggle-add": "Filter hinzufügen",
+    "toggle-edit": "Filter bearbeiten",
+    "name": "Name",
+    "type": "Typ",
+    "name-default": "Zum Beispiel: Arbeit",
+    "positive": "Positiv",
+    "negative": "Negativ",
+    "add": "Neuen Filter hinzufügen",
+    "select": "Filter zum Bearbeiten auswählen...",
+    "edit": "Bearbeiten",
+    "editing": "Bearbeitung",
+    "delete": "Filter löschen",
+    "error-missing": "Bitte fülle alle Felder aus",
+    "error-filterNameLength": "Filtername muss zwischen 1 und 12 Zeichen lang sein",
+    "error-filterExisting": "Filtername existiert bereits",
+    "error-filter-all": "Filtername darf nicht 'all' sein"
+  },
+
+  "Settings": {
+    "welcome": "Willkommen zurück",
+    "darkmode": "Dunkelmodus",
+    "off": "Aus",
+    "on": "Ein",
+    "sound": "Geräusche",
+    "language": "Sprache",
+    "english": "Englisch",
+    "spanish": "Spanisch",
+    "deutsch": "Deutsch",
+    "logout": "Abmelden"
+  }
+}

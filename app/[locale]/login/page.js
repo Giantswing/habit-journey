@@ -1,16 +1,22 @@
 "use client";
 
-import { useAuthContext } from "../context/AuthContext";
+import { useAuthContext } from "@/app/context/AuthContext";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useRouter } from "next/navigation";
+
 import { FcGoogle } from "react-icons/fc";
 import { db } from "@/lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import Image from "next/image";
+
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next-intl/client';
+
+import AppLogo from "@/app/components/AppLogo";
 
 
 export default function LoginPage() {
+  const t = useTranslations('LoginPage');
+  const locale = useLocale();
   const router = useRouter();
   const { user, setUser, setScore } = useAuthContext();
 
@@ -29,6 +35,7 @@ export default function LoginPage() {
           {
             name: result.user.displayName,
             email: result.user.email,
+            lastLoginDate: parseInt(new Date().getDate()),
           },
           { merge: true }
         );
@@ -39,8 +46,17 @@ export default function LoginPage() {
             theme: 'light',
             soundEnabled: true,
             lastLoginDate: parseInt(new Date().getDate()),
+            language: locale,
+
           }, { merge: true });
         }
+
+        if (!docSnap.data().language) {
+          await setDoc(docRef, {
+            language: locale,
+          }, { merge: true });
+        }
+
       } else {
         await setDoc(
           docRef,
@@ -51,7 +67,7 @@ export default function LoginPage() {
             theme: 'light',
             soundEnabled: true,
             lastLoginDate: parseInt(new Date().getDate()),
-
+            language: locale,
           },
           { merge: true }
         );
@@ -61,14 +77,14 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <section className="flex flex-col items-center justify-center px-12 py-8 border rounded-md">
-        <Image src="/habit-journey-logo.png" alt="Habit Journey Logo" width={60} height={60} className="mb-5" />
-        <h1 className="mb-8 text-xl text-center uppercase">Login to Habit Journey</h1>
+    <main className="flex flex-col items-center justify-center h-screen ">
+      <section className="flex flex-col items-center justify-center px-12 py-8 border rounded-md shadow-md shadow-pale-400">
+        <AppLogo />
+        <h1 className="mt-8 mb-8 text-xl text-center uppercase">{t('title')}</h1>
 
-        <button className="flex flex-col items-center px-6 py-4 mb-4 text-lg leading-tight duration-100 border border-pale-800 rounded-xl text-pale-800 hover:bg-pale-800 hover:text-white md:flex-row md:gap-4" onClick={login}>
+        <button className="flex flex-col items-center px-6 py-3 mb-4 text-lg leading-tight duration-100 bg-white border rounded-full shadow-md border-pale-800 text-pale-800 shadow-transparent hover:-translate-y-1 hover:shadow-pale-700 md:flex-row md:gap-4" onClick={login}>
           <FcGoogle className="mb-2 md:mb-0" />
-          Login with Google
+          {t('loginWithGoogle')}
         </button>
       </section>
     </main>

@@ -1,13 +1,17 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "../context/AuthContext";
 import Toggle from "./Toggle";
+import ToggleMultiple from "./ToggleMultiple";
 import AppLogo from "./AppLogo";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from "next-intl/link";
+import { useRouter } from "next-intl/client";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function SideMenu() {
-  const { user, logout, darkMode, setDarkMode, soundEnabled, setSoundEnabled } = useAuthContext();
+  const t = useTranslations("Settings");
+  const locale = useLocale();
+  const { user, logout, darkMode, setDarkMode, soundEnabled, setSoundEnabled, language, setLanguage } = useAuthContext();
   const searchParams = useSearchParams();
   const showSideMenu = searchParams.get("settings") != undefined;
   const router = useRouter();
@@ -28,18 +32,33 @@ export default function SideMenu() {
 
         <div className="relative flex flex-col items-center gap-4 pb-4 mb-8 border-b border-pale-600">
           <AppLogo />
-          <h2 className="text-4xl font-semibold text-center text-white uppercase">Welcome back, {user?.displayName}</h2>
+          <h2 className="text-2xl font-semibold text-center text-white uppercase">
+            {t("welcome")}, {user?.displayName}
+          </h2>
           <h4 className="text-lg text-center text-pale-400 ">{user?.email}</h4>
         </div>
 
         <div className="flex items-center gap-2 mb-8">
-          <h4 className="text-lg text-white w-[50%]">Dark mode</h4>
-          <Toggle firstOption="Off" secondOption="On" getter={darkMode} setter={setDarkMode} />
+          <h4 className="text-lg text-white w-[50%]">{t("darkmode")}</h4>
+          <Toggle firstOption={t("off")} secondOption={t("on")} getter={darkMode} setter={setDarkMode} />
+        </div>
+
+        <div className="flex items-center gap-2 mb-8">
+          <h4 className="text-lg text-white w-[50%]">{t("sound")}</h4>
+          <Toggle firstOption={t("off")} secondOption={t("on")} getter={soundEnabled} setter={setSoundEnabled} />
         </div>
 
         <div className="flex items-center gap-2">
-          <h4 className="text-lg text-white w-[50%]">Sound effects</h4>
-          <Toggle firstOption="Off" secondOption="On" getter={soundEnabled} setter={setSoundEnabled} />
+          <h4 className="text-lg text-white w-[50%]">{t("language")}</h4>
+          <ToggleMultiple
+            getter={language}
+            setter={setLanguage}
+            values={{
+              en: t("english"),
+              es: t("spanish"),
+              de: t("deutsch"),
+            }}
+          />
         </div>
 
         <div className="fixed gap-4 text-xl text-center text-white uppercase left-5 right-5 bottom-10">
@@ -52,7 +71,7 @@ export default function SideMenu() {
               // setShowSideMenu(false);
             }}
           >
-            Logout
+            {t("logout")}
           </button>
         </div>
       </div>

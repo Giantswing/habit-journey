@@ -3,9 +3,12 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
+
+import { useLocale, useTranslations } from "next-intl";
+import { ChangeEvent, useTransition } from "react";
+import { usePathname, useRouter } from "next-intl/client";
 
 export const AuthContext = createContext(null);
 
@@ -19,6 +22,11 @@ export default function AuthContextProvider({ children }) {
   const [lastLoginDate, setLastLoginDate] = useState(null);
   const decryptKey = useRef(null);
   const [allowSave, setAllowSave] = useState(false);
+
+  const locale = useLocale();
+  const pathname = usePathname();
+  const [language, setLanguage] = useState(locale);
+  const [isPending, startTransition] = useTransition();
 
   const CryptoJS = require("crypto-js");
 
@@ -64,8 +72,10 @@ export default function AuthContextProvider({ children }) {
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   async function loadData({ userId }) {
-    if (!userId) return;
-
+    if (!userId) {
+      // console.log("no user id");
+      return;
+    }
     const docRef = doc(db, "users", userId);
     const docSnap = await getDoc(docRef);
 
@@ -92,11 +102,14 @@ export default function AuthContextProvider({ children }) {
       const decryptedHabits = await decryptedData.text();
       tempHabits = JSON.parse(decryptedHabits);
 
-      if (docSnap.data().lastDate !== undefined) {
-        var oldDate = docSnap.data().lastDate;
+      if (docSnap.data().lastLoginDate !== undefined) {
+        var oldDate = docSnap.data().lastLoginDate;
         var newDate = parseInt(new Date().getDate());
+
         if (oldDate !== newDate) {
+          console.log("refreshing habits");
           refreshHabitIterations(tempHabits);
+          forceSaveDate(newDate, docRef);
         }
         setLastLoginDate(newDate);
       } else {
@@ -139,6 +152,15 @@ export default function AuthContextProvider({ children }) {
     } else {
       setSoundEnabled(true);
     }
+
+    if (docSnap.data().language !== undefined) {
+      setLanguage(docSnap.data().language);
+    } else {
+      setLanguage(locale);
+    }
+
+    // console.log("loaded data sucessfully", "user id: " + userId);
+    // console.log(db);
   }
 
   function refreshHabitIterations(tempHabits) {
@@ -148,12 +170,24 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
+  //Default to OS theme until user data is loaded
   useEffect(() => {
     setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
     setTimeout(() => {
       setAllowSave(true);
     }, 3000);
   }, []);
+
+  async function forceSaveDate(newDate = lastLoginDate, docRef) {
+    console.log("force saving new date");
+    await setDoc(
+      docRef,
+      {
+        lastLoginDate: newDate,
+      },
+      { merge: true }
+    );
+  }
 
   async function saveFilters(newFilters = filters) {
     if (!user || !allowSave) return;
@@ -217,7 +251,7 @@ export default function AuthContextProvider({ children }) {
     );
   }
 
-  async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled, newDate = lastLoginDate) {
+  async function saveUserData(newTheme = darkMode, newSoundEnabled = soundEnabled, newLanguage = language) {
     if (!user || !allowSave) return;
     const docRef = doc(db, "users", user.uid);
     await setDoc(
@@ -225,7 +259,8 @@ export default function AuthContextProvider({ children }) {
       {
         theme: newTheme ? "dark" : "light",
         sound: newSoundEnabled,
-        lastDate: newDate,
+
+        language: newLanguage,
       },
       { merge: true }
     );
@@ -239,6 +274,14 @@ export default function AuthContextProvider({ children }) {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    const nextLocale = language;
+    startTransition(() => {
+      console.log(pathname);
+      router.replace(pathname, { locale: nextLocale });
+    });
+  }, [language]);
 
   // Auto saving
   useEffect(() => {
@@ -259,7 +302,7 @@ export default function AuthContextProvider({ children }) {
   useEffect(() => {
     //console.log("Saving theme " + darkMode);
     saveUserData();
-  }, [darkMode, soundEnabled, lastLoginDate]);
+  }, [darkMode, soundEnabled, language]);
 
   // End auto saving
 
@@ -281,6 +324,13 @@ export default function AuthContextProvider({ children }) {
       unsubscribe();
     };
   }, []);
+
+  // Reload data when language changes
+  // useEffect(() => {
+  //   if (!allowSave) return;
+  //   console.log("forcing reload");
+  //   loadData({ userId: user?.uid });
+  // }, [language]);
 
   return (
     <AuthContext.Provider
@@ -311,6 +361,10 @@ export default function AuthContextProvider({ children }) {
         setDarkMode,
         soundEnabled,
         setSoundEnabled,
+
+        language,
+        setLanguage,
+
         logout,
       }}
     >

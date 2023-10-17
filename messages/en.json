@@ -1,0 +1,84 @@
+{
+  "LoginPage": {
+    "title": "Login to Habit Journey",
+    "loginWithGoogle": "Log in with Google"
+  },
+
+  "EditScoreModal": {
+    "title": "Editar score",
+    "score": "Score",
+    "update": "Update score"
+  },
+
+  "Home": {
+    "add-positive": "Add new positive habit",
+    "add-negative": "Add new negative habit",
+    "switch-positive": "Switch to positive habits",
+    "switch-negative": "Switch to negative habits",
+    "filter-by": "Filter by",
+    "no-habits": "Ups, it seems that you either have no habits or there are none that match the selected filter, why don't you add one?"
+  },
+
+  "HabitModal": {
+    "title": "Add habit",
+    "edit-title": "Edit",
+    "name": "Name",
+    "name-default": "Eg: Go for a run",
+    "cost": "Cost",
+    "reward": "Reward",
+    "reward-default": "How much reward?",
+    "reward-default-negative": "How much cost?",
+    "duration": "Duration (in minutes)",
+    "duration-default": "How long?",
+    "category": "Category",
+    "unlimited": "Unlimited daily uses",
+    "iterations": "Current daily uses",
+    "iterations-default": "Enter a number",
+    "maxIterations": "Max daily uses",
+    "delete": "Delete habit",
+    "add": "Add",
+    "edit": "Edit",
+    "positive": "positive habit",
+    "negative": "negative habit",
+    "error-missing": "Please fill all the fields",
+    "error-maxlessthanit": "Iterations can't be greater than max iterations",
+    "error-iterations": "Iterations can't be less than 0",
+    "error-maxIterations": "Max iterations can't be less than 1",
+    "error-maxIterationsBig": "Max iterations can't be greater than 15",
+    "error-cost": "Cost/Reward can't be less than 1",
+    "error-duration": "Duration can't be less than 1"
+  },
+
+  "FilterModal": {
+    "title": "Add or Edit filters",
+    "toggle-add": "Add filter",
+    "toggle-edit": "Edit filter",
+    "name": "Name",
+    "type": "Type",
+    "name-default": "Eg: Work",
+    "positive": "Positive",
+    "negative": "Negative",
+    "add": "Add new filter",
+    "select": "Select filter to edit...",
+    "edit": "Edit",
+    "editing": "Editing",
+    "delete": "Delete filter",
+    "error-missing": "Please fill all the fields",
+    "error-filterNameLength": "Filter name must be between 1 and 12 characters",
+    "error-filterExisting": "Filter name already exists",
+    "error-filter-all": "Filter name cant be 'all'"
+  },
+
+  "Settings": {
+    "welcome": "Welcome back",
+    "darkmode": "Dark mode",
+    "off": "Off",
+    "on": "On",
+    "sound": "Sounds",
+    "language": "Language",
+    "english": "English",
+    "spanish": "Spanish",
+    "deutsch": "Deutsch",
+    "logout": "Logout"
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "./context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import { PiGearDuotone } from "react-icons/pi";
 import { AiOutlineMenu } from "react-icons/ai";
 import Link from "next/link";
@@ -10,18 +10,21 @@ import Link from "next/link";
 /* Firebase */
 
 /* Components */
-import LogOutButton from "./components/LogOutButton";
-import NewHabitModal from "./components/NewHabitModal";
-import SwitchButton from "./components/SwitchButton";
-import ScoreCounter from "./components/ScoreCounter";
-import HabitList from "./components/HabitList";
-import NewFilterList from "./components/NewFilterList";
-import EditFiltersModal from "./components/EditFiltersModal";
-import SideMenu from "./components/SideMenu";
-import EditScoreModal from "./components/EditScoreModal";
+import LogOutButton from "../components/LogOutButton";
+import NewHabitModal from "../components/NewHabitModal";
+import SwitchButton from "../components/SwitchButton";
+import ScoreCounter from "../components/ScoreCounter";
+import HabitList from "../components/HabitList";
+import NewFilterList from "../components/NewFilterList";
+import EditFiltersModal from "../components/EditFiltersModal";
+import SideMenu from "../components/SideMenu";
+import EditScoreModal from "../components/EditScoreModal";
 import { useSearchParams } from "next/navigation";
 
+import { useTranslations } from 'next-intl';
+
 export default function Home() {
+  const t = useTranslations('Home');
   const {
     user,
     loading,
@@ -30,7 +33,7 @@ export default function Home() {
     filters,
     selectedFilters,
     setSelectedFilters,
-    darkMode
+    darkMode,
   } = useAuthContext();
 
 
@@ -87,7 +90,9 @@ export default function Home() {
           <EditFiltersModal />
           <EditScoreModal />
 
-          <div className="flex items-start gap-3">
+          <h4 className="mb-2 dark:text-pale-200">{t("filter-by")}:</h4>
+          <div className="flex items-start gap-3 mb-4">
+
             <NewFilterList
               getter={filters}
               selected={selectedFilters}
@@ -98,6 +103,7 @@ export default function Home() {
               <PiGearDuotone className="inline-block w-6 h-6" />
             </Link>
           </div>
+
           <HabitList isSwitching={isSwitching} />
 
           <button
@@ -111,7 +117,7 @@ export default function Home() {
               // setShowHabitModal(true);
             }}
           >
-            Add new {currentHabitType} habit
+            {currentHabitType == "positive" ? t('add-positive') : t('add-negative')}
           </button>
         </div>
 

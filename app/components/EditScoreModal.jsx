@@ -2,12 +2,15 @@ import CustomModal from "./CustomModal";
 import { useAuthContext } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next-intl/client";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function EditScoreModal() {
   const { score, setScore } = useAuthContext();
   const [newScore, setNewScore] = useState(score);
   const [auxInfo, setAuxInfo] = useState([]);
+  const t = useTranslations("EditScoreModal");
 
   const searchParams = useSearchParams();
   const showEditScoreModal = searchParams.get("score") != undefined;
@@ -38,10 +41,10 @@ export default function EditScoreModal() {
   }
 
   return (
-    <CustomModal displayState={showEditScoreModal} onClose={closeModal} title="Manually Edit Score">
+    <CustomModal displayState={showEditScoreModal} onClose={closeModal} title={t("title")}>
       <div className="flex flex-col">
         <label htmlFor="score" className="text-pale-800 dark:text-pale-200">
-          Score
+          {t("score")}
         </label>
         <input
           type="number"
@@ -52,7 +55,7 @@ export default function EditScoreModal() {
         />
 
         <button onClick={() => updateScore()} className="p-2 mt-4 border-2 rounded-md dark:text-pale-100 border-pale-400 dark:bg-pale-700 dark:border-pale-700">
-          Update Score
+          {t("update")}
         </button>
 
         {auxInfo.length > 0 && (
