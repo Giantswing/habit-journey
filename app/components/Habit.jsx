@@ -178,10 +178,10 @@ export default function Habit({ habit }) {
       <div
         className={`font-semibold absolute top-1 right-1 px-2  text-xs text-white bg-black rounded-l-xl rounded-tr-sm  bg-opacity-0 ${
           auxInfo == "" ? "" : "bg-opacity-70"
-        } ${auxInfo == "Doing..." ? "animate-pulse" : ""} duration-300`}
+        } ${auxInfo == t("doing") ? "animate-pulse" : ""} duration-300`}
       >
         <span className="flex items-center gap-2">
-          {auxInfo} {auxInfo == "Doing..." && <AiOutlineLoading3Quarters className="inline-block animate-spin" />}
+          {auxInfo} {auxInfo == t("doing") && <AiOutlineLoading3Quarters className="inline-block animate-spin" />}
         </span>
       </div>
 
