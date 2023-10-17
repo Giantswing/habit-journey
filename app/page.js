@@ -37,9 +37,6 @@ export default function Home() {
   const router = useRouter();
   const data = router.query;
 
-  if (router.query && router.query.settings != undefined)
-    console.log(data.settings);
-
   const [isSwitching, setIsSwitching] = useState(false);
 
   const searchParams = useSearchParams();

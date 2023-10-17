@@ -38,7 +38,6 @@ export default function NewHabitModal() {
   const router = useRouter();
 
   function resetNewHabit() {
-    console.log("resetting habit");
     setNewHabit({
       id: parseInt(Date.now().toString().slice(-5)),
       title: "",
@@ -64,9 +63,11 @@ export default function NewHabitModal() {
     //Verify if the habit is valid
     var anyError = false;
     var errorMsg = [];
+    var msg = "";
 
     if (!newHabit.title || !newHabit.cost || !newHabit.duration) {
       anyError = true;
+
       errorMsg.push("Please fill all the fields");
     }
 
@@ -157,7 +158,6 @@ export default function NewHabitModal() {
         ...habitToEdit,
         duration: habitToEdit.duration / 60,
       });
-      console.log(habitToEdit);
 
       setSelectedModalFilters({
         positive: habitToEdit.category,

@@ -137,7 +137,6 @@ export default function AuthContextProvider({ children }) {
     if (docSnap.data().sound !== undefined) {
       setSoundEnabled(docSnap.data().sound);
     } else {
-      console.log("Sound settings not found, defaulting to true");
       setSoundEnabled(true);
     }
   }
@@ -233,7 +232,6 @@ export default function AuthContextProvider({ children }) {
   }
 
   async function logout() {
-    console.log("Logging out");
     try {
       await signOut(auth);
       router.push("/login");

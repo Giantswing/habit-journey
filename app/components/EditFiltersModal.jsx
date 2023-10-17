@@ -80,7 +80,6 @@ export default function EditFiltersModal() {
     newHabits.forEach((habit, index) => {
       if (habit.type === deletedFilter.type && habit.category === deletedFilter.title) {
         habit.category = "all";
-        console.log("habit changed");
       }
     });
 
