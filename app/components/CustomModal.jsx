@@ -1,4 +1,4 @@
-import { AiOutlineClose, AiFillDelete, AiOutlineCheck } from "react-icons/ai";
+import Image from "next/image";
 
 export default function CustomModal({ children, displayState, onClose, title }) {
   return (
@@ -18,7 +18,7 @@ export default function CustomModal({ children, displayState, onClose, title }) 
           }}
           className="absolute top-4 right-4 text-pale-600 dark:text-pale-300"
         >
-          <AiOutlineClose className="text-xl" />
+          {/* <Image src="icons/CloseIcon.svg" className="text-xl" /> */}
         </button>
 
         {children}

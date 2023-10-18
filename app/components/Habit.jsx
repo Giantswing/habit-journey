@@ -1,9 +1,4 @@
 import React from "react";
-import { BiTimeFive } from "react-icons/bi";
-import { AiOutlineFilter, AiOutlineLoading3Quarters } from "react-icons/ai";
-import { BsCircle, BsCircleFill } from "react-icons/bs";
-import { IoIosInfinite } from "react-icons/io";
-import { PiCoinsDuotone, PiGearDuotone } from "react-icons/pi";
 import { useAuthContext } from "../context/AuthContext";
 
 import { useEffect, useState } from "react";
@@ -12,6 +7,14 @@ import convertSecondsToTime from "../utils/convertSecondsToTime";
 import { useSearchParams, useRouter } from "next/navigation";
 
 import { useTranslations } from "next-intl";
+
+import GearIcon from "public/icons/Gear.svg";
+import CoinsIcon from "public/icons/Coins.svg";
+import TimeIcon from "public/icons/Time.svg";
+import FilterIcon from "public/icons/Filter.svg";
+import CircleFullIcon from "public/icons/CircleFull.svg";
+import CircleEmptyIcon from "public/icons/CircleEmpty.svg";
+import InfiniteIcon from "public/icons/Infinite.svg";
 
 export default function Habit({ habit }) {
   const t = useTranslations("Habit");
@@ -52,15 +55,15 @@ export default function Habit({ habit }) {
   //Handle the iterations of the habit
   function displayIterations() {
     if (habit.unlimited || habit.maxIterations === 0) {
-      return <IoIosInfinite />;
+      return <InfiniteIcon className="w-6 h-auto" />;
     } else {
       if (habit.maxIterations < 6) {
         var iterations = [];
         for (var i = 0; i < habit.maxIterations; i++) {
           if (i < habit.iterations) {
-            iterations.push(<BsCircleFill key={i} />);
+            iterations.push(<CircleFullIcon key={i} className="w-4 h-auto" />);
           } else {
-            iterations.push(<BsCircle key={i} />);
+            iterations.push(<CircleEmptyIcon key={i} className="w-4 h-auto" />);
           }
         }
       } else {
@@ -152,16 +155,16 @@ export default function Habit({ habit }) {
         </div>
         <div className="flex gap-4">
           <div className={`font-bold flex items-center gap-1 ${habit.type === "positive" ? "text-green-600" : "text-red-600"}`}>
-            <PiCoinsDuotone />
+            <CoinsIcon className="w-4 h-auto" />
             {habit.cost}
           </div>
           <div className="flex items-center gap-1 text-pale-700 dark:text-pale-50">
-            <BiTimeFive />
+            <TimeIcon className="w-4 h-auto" />
             {convertSecondsToTime(habit.duration)}
           </div>
           {habit.category !== "all" && (
             <div className="flex items-center gap-1 capitalize text-pale-700 dark:text-pale-50">
-              <AiOutlineFilter />
+              <FilterIcon className="w-4 h-auto" />
               {habit.category}
             </div>
           )}
@@ -193,7 +196,7 @@ export default function Habit({ habit }) {
           setHabitToEdit(habit);
         }}
       >
-        <PiGearDuotone className="absolute bottom-1 right-1" />
+        <GearIcon className="absolute w-6 h-auto bottom-1 right-1 text-pale-700 dark:text-pale-400" />
       </div>
     </li>
   );

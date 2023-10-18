@@ -1,12 +1,13 @@
 {
   "name": "habit-journey",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "crypto-js": "^4.1.1",
@@ -16,12 +17,14 @@
     "next-intl": "^3.0.0-beta.19",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^4.11.0",
     "tailwindcss-fluid-type": "^2.0.3"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.5.5",
+    "@svgr/webpack": "^8.1.0",
     "@whiterussianstudio/tailwind-easing": "^1.0.0",
     "autoprefixer": "^10",
+    "cross-env": "^7.0.3",
     "encoding": "^0.1.13",
     "husky": "^8.0.3",
     "postcss": "^8",

@@ -3,12 +3,13 @@ import Label from "./Label";
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
-import { AiOutlineCheck } from "react-icons/ai";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next-intl/client";
 import CustomModal from "./CustomModal";
 
 import { useTranslations } from "next-intl";
+
+import CheckIcon from "public/icons/Check.svg";
 
 export default function NewHabitModal() {
   const { habits, setHabits, currentHabitType, filters, editMode, setHabitToEdit, habitToEdit, setEditMode } = useAuthContext();
@@ -215,7 +216,7 @@ export default function NewHabitModal() {
                 newHabit.unlimited ? "bg-pale-600 dark:bg-pale-50 border-transparent" : "bg-white dark:bg-pale-700"
               }`}
             >
-              {newHabit.unlimited && <AiOutlineCheck className="w-full text-3xl text-center text-white -translate-y-2 dark:text-pale-900" />}
+              {newHabit.unlimited && <CheckIcon className="w-full text-3xl text-center text-white -translate-y-3 dark:text-pale-900" />}
             </button>
 
             <label htmlFor="unlimited" className="text-md dark:text-pale-50">

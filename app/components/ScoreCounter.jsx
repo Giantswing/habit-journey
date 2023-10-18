@@ -1,17 +1,15 @@
 import { useAuthContext } from "../context/AuthContext";
 import { useEffect, useState } from "react";
-import { PiCoinsDuotone, PiGearDuotone } from "react-icons/pi";
+
 import Link from "next/link";
+
+import GearIcon from "public/icons/Gear.svg";
 
 export default function ScoreCounter() {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreState, setScoreState] = useState("neutral");
   const { score, soundEnabled } = useAuthContext();
   const audio = new Audio("coin1.ogg");
-
-  // const searchParams = useSearchParams();
-  // const showScoreModal = searchParams.get("habit") != undefined;
-  // const router = useRouter();
 
   var transitionAmount = 1;
   const [iterations, setIterations] = useState(0);
@@ -58,9 +56,8 @@ export default function ScoreCounter() {
     `}
       >
         {parseInt(displayedScore)}
-        <PiCoinsDuotone className="inline-block scale-75" />
       </div>
-      <PiGearDuotone className="text-xl text-pale-700 dark:text-pale-400" />
+      <GearIcon className="text-xl text-pale-700 dark:text-pale-400" />
     </Link>
   );
 }

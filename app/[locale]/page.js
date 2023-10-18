@@ -3,14 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "../context/AuthContext";
-import { PiGearDuotone } from "react-icons/pi";
-import { AiOutlineMenu } from "react-icons/ai";
+
 import Link from "next/link";
 
-/* Firebase */
-
 /* Components */
-import LogOutButton from "../components/LogOutButton";
 import NewHabitModal from "../components/NewHabitModal";
 import SwitchButton from "../components/SwitchButton";
 import ScoreCounter from "../components/ScoreCounter";
@@ -22,6 +18,10 @@ import EditScoreModal from "../components/EditScoreModal";
 import { useSearchParams } from "next/navigation";
 
 import { useTranslations } from 'next-intl';
+
+/* Icons */
+import MenuIcon from "public/icons/Menu.svg"
+import GearIcon from "public/icons/Gear.svg"
 
 export default function Home() {
   const t = useTranslations('Home');
@@ -80,7 +80,7 @@ export default function Home() {
               className={`${showSideMenu ? "opacity-0" : "opacity-100"}
                       dark:text-pale-50`}
             >
-              <AiOutlineMenu className="inline-block w-8 h-8 duration-200 hover:opacity-50" />
+              <MenuIcon className="w-12 h-auto duration-200 text-pale-500 hover:opacity-50" />
             </Link>
           </section>
 
@@ -100,7 +100,7 @@ export default function Home() {
               isSwitching={isSwitching}
             />
             <Link href="?filter=true" className="text-pale-700 dark:text-pale-300">
-              <PiGearDuotone className="inline-block w-6 h-6" />
+              <GearIcon className="text-lg text-pale-700 dark:text-pale-400" />
             </Link>
           </div>
 
@@ -114,7 +114,6 @@ export default function Home() {
             onClick={() => {
               setEditMode(false);
               router.push(`?habit=true`);
-              // setShowHabitModal(true);
             }}
           >
             {currentHabitType == "positive" ? t('add-positive') : t('add-negative')}

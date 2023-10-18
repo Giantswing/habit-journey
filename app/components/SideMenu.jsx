@@ -1,4 +1,3 @@
-import { AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "../context/AuthContext";
 import Toggle from "./Toggle";
 import ToggleMultiple from "./ToggleMultiple";
@@ -7,6 +6,9 @@ import { useSearchParams } from "next/navigation";
 import Link from "next-intl/link";
 import { useRouter } from "next-intl/client";
 import { useTranslations, useLocale } from "next-intl";
+
+/* Icons */
+import CloseIcon from "public/icons/Close.svg";
 
 export default function SideMenu() {
   const t = useTranslations("Settings");
@@ -21,12 +23,12 @@ export default function SideMenu() {
       <div
         className={`
         ${showSideMenu ? "translate-x" : "translate-x-full opacity-0"}
-        p-4 pt-7 fixed max-w-lg top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full h-full z-50 transtion-transform ease-out-expo duration-300 
+        p-4 pt-10 fixed max-w-lg top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full h-full z-50 transtion-transform ease-out-expo duration-300 
         `}
       >
         <div className="relative flex justify-end block w-full mb-8 text-right">
-          <Link href="/" className="text-white">
-            <AiOutlineClose size={30} />
+          <Link href="/">
+            <CloseIcon className="w-12 h-auto text-pale-400" />
           </Link>
         </div>
 

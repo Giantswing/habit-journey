@@ -4,8 +4,6 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, TwitterAuthProvider, signInWithPopup } from "firebase/auth";
 
-import { FcGoogle } from "react-icons/fc";
-import { AiOutlineTwitter } from "react-icons/ai";
 import { db } from "@/lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -13,6 +11,9 @@ import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next-intl/client';
 
 import AppLogo from "@/app/components/AppLogo";
+
+import GoogleIcon from "public/icons/Google.svg";
+import TwitterIcon from "public/icons/Twitter.svg";
 
 
 export default function LoginPage() {
@@ -146,14 +147,15 @@ export default function LoginPage() {
         <AppLogo />
         <h1 className="mt-8 mb-8 text-xl text-center uppercase">{t('title')}</h1>
 
-        <div className="flex flex-col gap-4">
-          <button className="flex flex-col items-center px-6 py-3 text-lg leading-tight duration-100 bg-white border rounded-full shadow-md border-pale-800 text-pale-800 shadow-transparent hover:-translate-y-1 hover:shadow-pale-700 md:flex-row md:gap-4" onClick={() => loginSelected("google")}>
-            <FcGoogle className="mb-2 md:mb-0" />
+        <div className="flex flex-col gap-6">
+          <button className="flex flex-col items-center px-6 py-2 text-lg leading-tight duration-100 bg-white border rounded-full shadow-md border-pale-800 text-pale-800 shadow-transparent hover:-translate-y-1 hover:shadow-pale-700 md:flex-row md:gap-4" onClick={() => loginSelected("google")}>
+            <GoogleIcon className="w-6 h-auto mb-2 md:mb-0" />
             {t('loginWithGoogle')}
           </button>
 
-          <button className="flex flex-col items-center px-6 py-3 mb-4 text-lg leading-tight text-white duration-100 border rounded-full shadow-md bg-cyan-600 border-pale-800 shadow-transparent hover:-translate-y-1 hover:shadow-pale-700 md:flex-row md:gap-4" onClick={() => loginSelected("twitter")}>
-            <AiOutlineTwitter className="mb-2 md:mb-0" />
+          <button className="flex flex-col items-center px-6 py-2 mb-4 text-lg leading-tight text-white duration-100 border rounded-full shadow-md bg-cyan-600 border-pale-800 shadow-transparent hover:-translate-y-1 hover:shadow-pale-700 md:flex-row md:gap-4" onClick={() => loginSelected("twitter")}>
+
+            <TwitterIcon className="w-6 h-auto mb-2 md:mb-0" />
             {t('loginWithTwitter')}
           </button>
         </div>
