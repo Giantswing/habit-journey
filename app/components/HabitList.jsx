@@ -1,11 +1,13 @@
 "use client";
 
 import { useAuthContext } from "../context/AuthContext";
-import { useTranslations } from "next-intl";
+
 import Habit from "./Habit";
 
+import useTranslation from "next-translate/useTranslation";
+
 export default function HabitList({ isSwitching }) {
-  const t = useTranslations("Home");
+  const { t } = useTranslation("common");
   const { habits, currentHabitType, selectedFilters } = useAuthContext();
 
   const filteredHabits = habits
@@ -38,7 +40,7 @@ export default function HabitList({ isSwitching }) {
             })
             .map((habit) => <Habit key={habit.id} habit={habit} />)
         ) : (
-          <p className="pr-8 text-left dark:text-white text-md">{t("no-habits")}</p>
+          <p className="pr-8 text-left dark:text-white text-md">{t("Home.no-habits")}</p>
         )}
       </ul>
     </div>

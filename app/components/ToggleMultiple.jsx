@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function ToggleMultiple({ getter, setter, values }) {
   const [currentIndex, setCurrentIndex] = useState(Object.keys(values).indexOf(getter));
@@ -49,16 +50,18 @@ export default function ToggleMultiple({ getter, setter, values }) {
       <div className="z-50 flex justify-between w-full h-full ">
         {Object.keys(values).map((key) => {
           return (
-            <button
+            <Link
               key={key}
-              className={`duration-100 w-full ${getter == key ? "font-semibold text-white shadow-sm" : ""} p-2 dark:text-white`}
+              className={`text-center duration-100 w-full ${getter == key ? "font-semibold text-white shadow-sm" : ""} p-2 dark:text-white`}
+              href={`/?lang=${key}&settings=true`}
+              // as={`${key}?settings=true`}
               onClick={() => {
                 setter(key);
                 setCurrentIndex(Object.keys(values).indexOf(key));
               }}
             >
               {values[key]}
-            </button>
+            </Link>
           );
         })}
       </div>

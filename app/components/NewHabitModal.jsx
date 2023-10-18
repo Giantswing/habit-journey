@@ -4,16 +4,15 @@ import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import NewFilterList from "./NewFilterList";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next-intl/client";
+import { useRouter } from "next/navigation";
 import CustomModal from "./CustomModal";
-
-import { useTranslations } from "next-intl";
+import useTranslation from "next-translate/useTranslation";
 
 import CheckIcon from "public/icons/Check.svg";
 
 export default function NewHabitModal() {
   const { habits, setHabits, currentHabitType, filters, editMode, setHabitToEdit, habitToEdit, setEditMode } = useAuthContext();
-  const t = useTranslations("HabitModal");
+  const { t, lang } = useTranslation("common");
 
   const [selectedModalFilters, setSelectedModalFilters] = useState({
     positive: "all",
@@ -71,35 +70,35 @@ export default function NewHabitModal() {
     if (!newHabit.title || !newHabit.cost || !newHabit.duration) {
       anyError = true;
 
-      errorMsg.push(t("error-missing"));
+      errorMsg.push(t("HabitModal.error-missing"));
     }
 
     if (!newHabit.unlimited && newHabit.iterations > newHabit.maxIterations) {
       anyError = true;
-      errorMsg.push(t("error-maxlessthanit"));
+      errorMsg.push(t("HabitModal.error-maxlessthanit"));
     }
     if (!newHabit.unlimited && newHabit.iterations < 0) {
       anyError = true;
-      errorMsg.push(t("error-iterations"));
+      errorMsg.push(t("HabitModal.error-iterations"));
     }
     if (!newHabit.unlimited && newHabit.maxIterations < 1) {
       anyError = true;
-      errorMsg.push(t("error-maxIterations"));
+      errorMsg.push(t("HabitModal.error-maxIterations"));
     }
 
     if (!newHabit.unlimited && newHabit.maxIterations > 15) {
       anyError = true;
-      errorMsg.push(t("error-maxIterationsBig"));
+      errorMsg.push(t("HabitModal.error-maxIterationsBig"));
     }
 
     if (newHabit.cost < 1) {
       anyError = true;
-      errorMsg.push(t("error-cost"));
+      errorMsg.push(t("HabitModal.error-cost"));
     }
 
     if (newHabit.duration < 1) {
       anyError = true;
-      errorMsg.push(t("error-duration"));
+      errorMsg.push(t("HabitModal.error-duration"));
     }
 
     setAuxInfo(errorMsg);
@@ -140,7 +139,7 @@ export default function NewHabitModal() {
   }
 
   function closeModal() {
-    router.push("/");
+    router.push(`/?lang=${lang}`);
     setEditMode(false);
     setHabitToEdit(null);
     setSelectedModalFilters({ positive: "all", negative: "all" });
@@ -172,12 +171,16 @@ export default function NewHabitModal() {
   }, [editMode, habitToEdit, router.asPath]);
 
   return (
-    <CustomModal displayState={showHabitModal} onClose={closeModal} title={editMode ? `${t("edit-title")} ${habitToEdit.title}` : `${t("title")}`}>
+    <CustomModal
+      displayState={showHabitModal}
+      onClose={closeModal}
+      title={editMode ? `${t("HabitModal.edit-title")} ${habitToEdit.title}` : `${t("HabitModal.title")}`}
+    >
       <div className="flex flex-col gap-3">
         <Label
           name="title"
-          displayName={t("name")}
-          displayDefault={currentHabitType == "positive" ? `${t("name-default")}` : `${t("name-default-negative")}`}
+          displayName={t("HabitModal.name")}
+          displayDefault={currentHabitType == "positive" ? `${t("HabitModal.name-default")}` : `${t("HabitModal.name-default-negative")}`}
           type="text"
           setNewHabit={setNewHabit}
           newHabit={newHabit}
@@ -187,23 +190,23 @@ export default function NewHabitModal() {
           <Label
             type="number"
             name="cost"
-            displayName={currentHabitType == "positive" ? `${t("reward")}` : `${t("cost")}`}
-            displayDefault={currentHabitType == "positive" ? `${t("reward-default")}` : `${t("reward-default-negative")}`}
+            displayName={currentHabitType == "positive" ? `${t("HabitModal.reward")}` : `${t("HabitModal.cost")}`}
+            displayDefault={currentHabitType == "positive" ? `${t("HabitModal.reward-default")}` : `${t("HabitModal.reward-default-negative")}`}
             setNewHabit={setNewHabit}
             newHabit={newHabit}
           />
           <Label
             type="number"
             name="duration"
-            displayName={t("duration")}
-            displayDefault={t("duration-default")}
+            displayName={t("HabitModal.duration")}
+            displayDefault={t("HabitModal.duration-default")}
             setNewHabit={setNewHabit}
             newHabit={newHabit}
           />
         </div>
 
         <div>
-          <label className="block mb-2 text-xs dark:text-pale-50">{t("category")}</label>
+          <label className="block mb-2 text-xs dark:text-pale-50">{t("HabitModal.category")}</label>
           {/* <FilterList mode="modal" newHabit={newHabit} setNewHabit={setNewHabit} /> */}
           <NewFilterList getter={filters} selected={selectedModalFilters} setSelected={setSelectedModalFilters} />
         </div>
@@ -220,7 +223,7 @@ export default function NewHabitModal() {
             </button>
 
             <label htmlFor="unlimited" className="text-md dark:text-pale-50">
-              {t("unlimited")}
+              {t("HabitModal.unlimited")}
             </label>
           </div>
           {!newHabit.unlimited && (
@@ -229,16 +232,16 @@ export default function NewHabitModal() {
                 disabled={!editMode}
                 type="number"
                 name="iterations"
-                displayName={t("iterations")}
-                displayDefault={t("iterations-default")}
+                displayName={t("HabitModal.iterations")}
+                displayDefault={t("HabitModal.iterations-default")}
                 setNewHabit={setNewHabit}
                 newHabit={newHabit}
               />
               <Label
                 type="number"
                 name="maxIterations"
-                displayName={t("maxIterations")}
-                displayDefault={t("iterations-default")}
+                displayName={t("HabitModal.maxIterations")}
+                displayDefault={t("HabitModal.iterations-default")}
                 setNewHabit={setNewHabit}
                 newHabit={newHabit}
               />
@@ -260,12 +263,13 @@ export default function NewHabitModal() {
 
       {editMode && (
         <button onClick={deleteHabit} className="w-full px-4 py-2 mt-4 text-white bg-red-600 rounded-md">
-          {t("delete")}
+          {t("HabitModal.delete")}
         </button>
       )}
 
       <button onClick={addNewHabit} className="w-full px-4 py-2 mt-5 text-white rounded-md bg-pale-800 dark:bg-pale-500">
-        {editMode ? `${t("edit")}` : `${t("add")}`} {currentHabitType === "positive" ? `${t("positive")}` : `${t("negative")}`}
+        {editMode ? `${t("HabitModal.edit")}` : `${t("HabitModal.add")}`}{" "}
+        {currentHabitType === "positive" ? `${t("HabitModal.positive")}` : `${t("HabitModal.negative")}`}
       </button>
     </CustomModal>
   );

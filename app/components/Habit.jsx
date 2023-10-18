@@ -6,7 +6,7 @@ import convertSecondsToTime from "../utils/convertSecondsToTime";
 
 import { useSearchParams, useRouter } from "next/navigation";
 
-import { useTranslations } from "next-intl";
+import useTranslation from "next-translate/useTranslation";
 
 import GearIcon from "public/icons/Gear.svg";
 import CoinsIcon from "public/icons/Coins.svg";
@@ -15,9 +15,10 @@ import FilterIcon from "public/icons/Filter.svg";
 import CircleFullIcon from "public/icons/CircleFull.svg";
 import CircleEmptyIcon from "public/icons/CircleEmpty.svg";
 import InfiniteIcon from "public/icons/Infinite.svg";
+import LoadingIcon from "public/icons/Loading.svg";
 
 export default function Habit({ habit }) {
-  const t = useTranslations("Habit");
+  const { t } = useTranslation("common");
   const { score, setScore, habits, setHabits, setEditMode, setHabitToEdit, currentHabitType } = useAuthContext();
 
   const [shouldWait, setShouldWait] = useState(false);
@@ -184,7 +185,7 @@ export default function Habit({ habit }) {
         } ${auxInfo == t("doing") ? "animate-pulse" : ""} duration-300`}
       >
         <span className="flex items-center gap-2">
-          {auxInfo} {auxInfo == t("doing") && <AiOutlineLoading3Quarters className="inline-block animate-spin" />}
+          {auxInfo} {auxInfo == t("doing") && <LoadingIcon className="w-4 h-auto animate-spin" />}
         </span>
       </div>
 

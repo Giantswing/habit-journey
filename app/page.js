@@ -2,29 +2,29 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "../context/AuthContext";
+import { useAuthContext } from "./context/AuthContext";
 
 import Link from "next/link";
 
 /* Components */
-import NewHabitModal from "../components/NewHabitModal";
-import SwitchButton from "../components/SwitchButton";
-import ScoreCounter from "../components/ScoreCounter";
-import HabitList from "../components/HabitList";
-import NewFilterList from "../components/NewFilterList";
-import EditFiltersModal from "../components/EditFiltersModal";
-import SideMenu from "../components/SideMenu";
-import EditScoreModal from "../components/EditScoreModal";
+import NewHabitModal from "./components/NewHabitModal";
+import SwitchButton from "./components/SwitchButton";
+import ScoreCounter from "./components/ScoreCounter";
+import HabitList from "./components/HabitList";
+import NewFilterList from "./components/NewFilterList";
+import EditFiltersModal from "./components/EditFiltersModal";
+import SideMenu from "./components/SideMenu";
+import EditScoreModal from "./components/EditScoreModal";
 import { useSearchParams } from "next/navigation";
 
-import { useTranslations } from 'next-intl';
+import useTranslation from 'next-translate/useTranslation'
 
 /* Icons */
 import MenuIcon from "public/icons/Menu.svg"
 import GearIcon from "public/icons/Gear.svg"
 
 export default function Home() {
-  const t = useTranslations('Home');
+  const { t, lang } = useTranslation('common');
   const {
     user,
     loading,
@@ -38,17 +38,14 @@ export default function Home() {
 
 
   const router = useRouter();
-  const data = router.query;
-
   const [isSwitching, setIsSwitching] = useState(false);
-
   const searchParams = useSearchParams();
   const showSideMenu = searchParams.get('settings') != undefined;
 
 
   useEffect(() => {
     if (!user && !loading) {
-      router.push("/login");
+      router.push("/login?lang=" + lang);
     }
   }, [user, loading]);
 
@@ -76,7 +73,7 @@ export default function Home() {
           <section className="flex items-center justify-between pb-2 mb-4 border-b border-pale-300 dark:border-pale-600">
             <ScoreCounter />
 
-            <Link href={`?settings=true`}
+            <Link href={`?lang=${lang}&settings=true`}
               className={`${showSideMenu ? "opacity-0" : "opacity-100"}
                       dark:text-pale-50`}
             >
@@ -90,7 +87,7 @@ export default function Home() {
           <EditFiltersModal />
           <EditScoreModal />
 
-          <h4 className="mb-2 dark:text-pale-200">{t("filter-by")}:</h4>
+          <h4 className="mb-2 dark:text-pale-200">{t("Home.filter-by")}:</h4>
           <div className="flex items-start gap-3 mb-4">
 
             <NewFilterList
@@ -99,7 +96,7 @@ export default function Home() {
               setSelected={setSelectedFilters}
               isSwitching={isSwitching}
             />
-            <Link href="?filter=true" className="text-pale-700 dark:text-pale-300">
+            <Link href={`?lang=${lang}&filter=true`} className="text-pale-700 dark:text-pale-300">
               <GearIcon className="text-lg text-pale-700 dark:text-pale-400" />
             </Link>
           </div>
@@ -113,10 +110,10 @@ export default function Home() {
               }`}
             onClick={() => {
               setEditMode(false);
-              router.push(`?habit=true`);
+              router.push(`?lang=${lang}&habit=true`);
             }}
           >
-            {currentHabitType == "positive" ? t('add-positive') : t('add-negative')}
+            {currentHabitType == "positive" ? t('Home.add-positive') : t('Home.add-negative')}
           </button>
         </div>
 

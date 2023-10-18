@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import GearIcon from "public/icons/Gear.svg";
+import useTranslation from "next-translate/useTranslation";
 
 export default function ScoreCounter() {
+  const { t, lang } = useTranslation("common");
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreState, setScoreState] = useState("neutral");
   const { score, soundEnabled } = useAuthContext();
@@ -48,7 +50,7 @@ export default function ScoreCounter() {
   }, [displayedScore, score]);
 
   return (
-    <Link href="?score=true" className="flex items-center gap-4">
+    <Link href={`?lang=${lang}&score=true`} className="flex items-center gap-4">
       <div
         className={`flex items-center
      font-bold text-8xl ${scoreState === "positive" && "text-green-500"} ${scoreState === "negative" && "text-red-500"}

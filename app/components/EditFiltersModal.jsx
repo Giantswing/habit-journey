@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Toggle from "./Toggle";
 import CustomModal from "./CustomModal";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next-intl/client";
-import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+
+import useTranslation from "next-translate/useTranslation";
 
 export default function EditFiltersModal() {
-  const t = useTranslations("FilterModal");
+  const { t, lang } = useTranslation("common");
   const { filters, setFilters, habits, setHabits } = useAuthContext();
   const [selectedFilter, setSelectedFilter] = useState("");
   const [filterName, setFilterName] = useState("");
@@ -29,22 +30,22 @@ export default function EditFiltersModal() {
 
     if (!filterName) {
       anyError = true;
-      errorMsg.push(t("error-missing"));
+      errorMsg.push(t("FilterModal.error-missing"));
     }
 
     if (filterName.length > 12) {
       anyError = true;
-      errorMsg.push(t("error-filterNameLength"));
+      errorMsg.push(t("FilterModal.error-filterNameLength"));
     }
 
     if (filterName === "all") {
       anyError = true;
-      errorMsg.push(t("error-filter-all"));
+      errorMsg.push(t("FilterModal.error-filter-all"));
     }
 
     if (filters.some((filter) => filter.title === filterName && filter.type === auxFilterType)) {
       anyError = true;
-      errorMsg.push(t("error-filterExisting"));
+      errorMsg.push(t("FilterModal.error-filterExisting"));
     }
 
     setAuxInfo(errorMsg);
@@ -137,7 +138,7 @@ export default function EditFiltersModal() {
   }
 
   function closeModal() {
-    router.push("/");
+    router.push(`/?lang=${lang}`);
     setIsEditing(false);
     resetFilter();
   }
@@ -160,9 +161,9 @@ export default function EditFiltersModal() {
   }, [selectedFilter]);
 
   return (
-    <CustomModal displayState={showEditFiltersModal} onClose={closeModal} title={t("title")}>
+    <CustomModal displayState={showEditFiltersModal} onClose={closeModal} title={t("FilterModal.title")}>
       <div className="mb-4">
-        <Toggle getter={isEditing} setter={setIsEditing} firstOption={t("toggle-add")} secondOption={t("toggle-edit")} />
+        <Toggle getter={isEditing} setter={setIsEditing} firstOption={t("FilterModal.toggle-add")} secondOption={t("FilterModal.toggle-edit")} />
       </div>
 
       <div className="flex flex-col">
@@ -179,7 +180,7 @@ export default function EditFiltersModal() {
                 }}
               >
                 <option value="" hidden>
-                  {t("select")}
+                  {t("FilterModal.select")}
                 </option>
                 {filters
                   .filter((filter, title, type) => filter.title != "all")
@@ -208,20 +209,20 @@ export default function EditFiltersModal() {
                     before:h-1 before:bg-pale-300 dark:before:bg-pale-600"
                 >
                   <h3 className="relative inline pr-4 mb-2 text-center bg-pale-50 dark:bg-pale-800 dark:text-pale-400">
-                    {t("editing")} <span className="font-bold dark:text-white">{selectedFilter.title} </span>
+                    {t("FilterModal.editing")} <span className="font-bold dark:text-white">{selectedFilter.title} </span>
                   </h3>
                 </div>
               )}
               <div className="flex items-center gap-2 mb-4">
                 <label htmlFor="filterTitle" className="w-20 dark:text-pale-100">
-                  {t("name")}
+                  {t("FilterModal.name")}
                 </label>
                 <input
                   className="w-full p-2 border rounded-md border-pale-400 dark:bg-pale-700 dark:text-white"
                   name="filterTitle"
                   type="text"
                   value={filterName}
-                  placeholder={t("name-default")}
+                  placeholder={t("FilterModal.name-default")}
                   onChange={(e) => {
                     var text = e.target.value;
                     text = text.replace(/[^a-zA-Z0-9 ]/g, "");
@@ -233,26 +234,32 @@ export default function EditFiltersModal() {
 
               <div className="flex items-center gap-2 mb-10">
                 <label htmlFor="filterType" className="w-20 dark:text-pale-100">
-                  {t("type")}
+                  {t("FilterModal.type")}
                 </label>
-                <Toggle getter={filterType} setter={setFilterType} firstOption={t("positive")} secondOption={t("negative")} type="greenred" />
+                <Toggle
+                  getter={filterType}
+                  setter={setFilterType}
+                  firstOption={t("FilterModal.positive")}
+                  secondOption={t("FilterModal.negative")}
+                  type="greenred"
+                />
               </div>
 
               {isEditing && (
                 <>
                   <button className="w-full p-2 mb-4 text-white bg-red-600 rounded-md" onClick={deleteFilter}>
-                    {t("delete")}
+                    {t("FilterModal.delete")}
                   </button>
 
                   <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={editFilter}>
-                    {t("edit")} {selectedFilter.title}
+                    {t("FilterModal.edit")} {selectedFilter.title}
                   </button>
                 </>
               )}
 
               {!isEditing && (
                 <button className="w-full p-2 text-white capitalize rounded-md bg-pale-600" onClick={addNewFilter}>
-                  {t("add")}
+                  {t("FilterModal.add")}
                 </button>
               )}
             </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import CloseIcon from "public/icons/Close.svg";
 
 export default function CustomModal({ children, displayState, onClose, title }) {
   return (
@@ -18,7 +19,7 @@ export default function CustomModal({ children, displayState, onClose, title }) 
           }}
           className="absolute top-4 right-4 text-pale-600 dark:text-pale-300"
         >
-          {/* <Image src="icons/CloseIcon.svg" className="text-xl" /> */}
+          <CloseIcon className="text-lg" />
         </button>
 
         {children}

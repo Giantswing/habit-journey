@@ -14,7 +14,7 @@
     "firebase": "^9.9.1",
     "next": "13.5.4",
     "next-auth": "^4.23.2",
-    "next-intl": "^3.0.0-beta.19",
+    "next-translate": "^2.6.1",
     "react": "^18",
     "react-dom": "^18",
     "tailwindcss-fluid-type": "^2.0.3"
@@ -27,6 +27,7 @@
     "cross-env": "^7.0.3",
     "encoding": "^0.1.13",
     "husky": "^8.0.3",
+    "next-translate-plugin": "^2.6.1",
     "postcss": "^8",
     "tailwindcss": "^3"
   },

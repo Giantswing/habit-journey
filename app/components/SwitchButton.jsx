@@ -1,10 +1,10 @@
 import React from "react";
 
 import { useAuthContext } from "../context/AuthContext";
-import { useTranslations } from "next-intl";
+import useTranslation from "next-translate/useTranslation";
 
 function SwitchButton({ isSwitching, setIsSwitching }) {
-  const t = useTranslations("Home");
+  const { t } = useTranslation("common");
   const { currentHabitType, setCurrentHabitType } = useAuthContext();
   return (
     <div className=" duration-100 fixed bottom-0 w-full max-w-lg p-3 bg-white dark:bg-pale-900 dark:bg-pale shadow-[0_-15px_50px_rgba(0,0,0,0.2)]">
@@ -20,7 +20,7 @@ function SwitchButton({ isSwitching, setIsSwitching }) {
           }, 150);
         }}
       >
-        {currentHabitType == "positive" ? t("switch-negative") : t("switch-positive")}
+        {currentHabitType == "positive" ? t("Home.switch-negative") : t("Home.switch-positive")}
       </button>
     </div>
   );

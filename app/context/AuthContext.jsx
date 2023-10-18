@@ -5,16 +5,15 @@ import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
-import { useLocale } from "next-intl";
-import { ChangeEvent, useTransition } from "react";
-import { usePathname, useRouter } from "next-intl/client";
+import defaultFilters from "@/defaults/defaultFilters.json";
 
 export const AuthContext = createContext(null);
 
-export default function AuthContextProvider({ children }) {
-  const router = useRouter();
+export default function AuthContextProvider({ children, lang }) {
   const [user, setUser] = useState(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(0);
   const [habits, setHabits] = useState([]);
@@ -23,43 +22,10 @@ export default function AuthContextProvider({ children }) {
   const decryptKey = useRef(null);
   const [allowSave, setAllowSave] = useState(false);
 
-  const locale = useLocale();
-  const pathname = usePathname();
-  const [language, setLanguage] = useState(locale);
-  const [isPending, startTransition] = useTransition();
+  const [language, setLanguage] = useState("en");
 
   const CryptoJS = require("crypto-js");
 
-  const defaultFilters = [
-    {
-      title: "all",
-      type: "positive",
-    },
-    {
-      title: "all",
-      type: "negative",
-    },
-    {
-      title: "sport",
-      type: "positive",
-    },
-    {
-      title: "work",
-      type: "positive",
-    },
-    {
-      title: "study",
-      type: "positive",
-    },
-    {
-      title: "leisure",
-      type: "negative",
-    },
-    {
-      title: "junk",
-      type: "negative",
-    },
-  ];
   const [filters, setFilters] = useState(defaultFilters);
   const [selectedFilters, setSelectedFilters] = useState({
     positive: "all",
@@ -155,8 +121,9 @@ export default function AuthContextProvider({ children }) {
 
     if (docSnap.data().language !== undefined) {
       setLanguage(docSnap.data().language);
+      router.push(`/?lang=${docSnap.data().language}`);
     } else {
-      setLanguage(locale);
+      setLanguage("en");
     }
 
     // console.log("loaded data sucessfully", "user id: " + userId);
@@ -259,7 +226,6 @@ export default function AuthContextProvider({ children }) {
       {
         theme: newTheme ? "dark" : "light",
         sound: newSoundEnabled,
-
         language: newLanguage,
       },
       { merge: true }
@@ -275,12 +241,12 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  useEffect(() => {
-    const nextLocale = language;
-    startTransition(() => {
-      router.replace(pathname, { locale: nextLocale });
-    });
-  }, [language]);
+  // useEffect(() => {
+  //   const nextLocale = language;
+  //   startTransition(() => {
+  //     router.replace(pathname, { locale: nextLocale });
+  //   });
+  // }, [language]);
 
   // Auto saving
   useEffect(() => {

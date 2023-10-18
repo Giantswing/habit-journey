@@ -1,15 +1,23 @@
-import createMiddleware from 'next-intl/middleware';
+import { NextResponse } from "next/server";
+import i18n from "./i18n";
 
-export default createMiddleware({
-    // A list of all locales that are supported
-    locales: ['en', 'es', 'de'],
-
-    // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
-    defaultLocale: 'en'
-});
+export function middleware(request) {
+    const locale = request.nextUrl.locale || i18n.defaultLocale;
+    request.nextUrl.searchParams.set("lang", locale);
+    request.nextUrl.href = request.nextUrl.href.replace(`/${locale}`, "");
+    return NextResponse.rewrite(request.nextUrl);
+}
 
 export const config = {
-    // Skip all paths that should not be internationalized. This example skips
-    // certain folders and all pathnames with a dot (e.g. favicon.ico)
-    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        '/',
+    ],
 };

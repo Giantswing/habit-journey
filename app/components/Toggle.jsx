@@ -1,9 +1,6 @@
 import { useState } from "react";
 
 export default function Toggle({ getter, setter, firstOption, secondOption, height = 15, type = "gray" }) {
-  //   const elementHeight = "h-[" + height + "px]";
-  //   const [isPressed, setIsPressed] = useState(false);
-
   function getToggleClassNames(type) {
     var result = "rounded-full ease-out-expo duration-300 -z-40 absolute top-0  w-1/2 h-full active:brightness-50";
 
@@ -12,11 +9,6 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
     } else {
       result += " left-0 ";
     }
-
-    // if (!isPressed) {
-    //   result += "scale-75";
-    // }
-
     if (type == "gray") {
       result += "bg-pale-700 dark:bg-pale-900";
     }
@@ -42,11 +34,6 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
           className={`duration-100 w-full ${getter ? "" : "font-semibold text-white shadow-sm"} p-2 dark:text-white`}
           onClick={() => {
             setter(false);
-
-            // setIsPressed(true);
-            // setTimeout(() => {
-            //   setIsPressed(false);
-            // }, 100);
           }}
         >
           {firstOption}
@@ -55,11 +42,6 @@ export default function Toggle({ getter, setter, firstOption, secondOption, heig
           className={`duration-100 w-full ${!getter ? "" : "font-semibold  text-white shadow-sm"} p-2 dark:text-white`}
           onClick={() => {
             setter(true);
-
-            // setIsPressed(true);
-            // setTimeout(() => {
-            //   setIsPressed(false);
-            // }, 100);
           }}
         >
           {secondOption}
