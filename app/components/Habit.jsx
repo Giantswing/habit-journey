@@ -15,6 +15,7 @@ import FilterIcon from "public/icons/Filter.svg";
 import CircleFullIcon from "public/icons/CircleFull.svg";
 import CircleEmptyIcon from "public/icons/CircleEmpty.svg";
 import InfiniteIcon from "public/icons/Infinite.svg";
+import LoadingIcon from "public/icons/Loading.svg";
 
 export default function Habit({ habit }) {
   const t = useTranslations("Habit");
@@ -184,7 +185,7 @@ export default function Habit({ habit }) {
         } ${auxInfo == t("doing") ? "animate-pulse" : ""} duration-300`}
       >
         <span className="flex items-center gap-2">
-          {auxInfo} {auxInfo == t("doing") && <AiOutlineLoading3Quarters className="inline-block animate-spin" />}
+          {auxInfo} {auxInfo == t("doing") && <LoadingIcon className="w-4 h-auto animate-spin" />}
         </span>
       </div>
 
