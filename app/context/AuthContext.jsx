@@ -2,11 +2,11 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { auth, db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 import { signOut } from "firebase/auth";
 import { useRef } from "react";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { ChangeEvent, useTransition } from "react";
 import { usePathname, useRouter } from "next-intl/client";
 

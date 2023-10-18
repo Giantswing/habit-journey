@@ -5,10 +5,10 @@ import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, TwitterAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { db } from "@/lib/firebase";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore/lite";
 
 import { useLocale, useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next-intl/client';
+import { useRouter } from 'next-intl/client';
 
 import AppLogo from "@/app/components/AppLogo";
 
