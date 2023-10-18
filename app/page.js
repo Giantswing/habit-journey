@@ -45,7 +45,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!user && !loading) {
-      router.push("/login?lang=" + lang);
+      router.push("/login");
     }
   }, [user, loading]);
 

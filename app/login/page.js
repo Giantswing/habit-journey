@@ -15,11 +15,12 @@ import TwitterIcon from "public/icons/Twitter.svg";
 import { useRouter } from "next/navigation";
 import useTranslation from 'next-translate/useTranslation'
 
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  const { setUser } = useAuthContext();
+  const { user, setUser } = useAuthContext();
 
 
   async function loginSelected(selectProvider) {
@@ -32,7 +33,7 @@ export default function LoginPage() {
     }
 
     const res = await signInWithPopup(auth, provider).then(async (result) => {
-      setUser(result.user);
+
       const docRef = doc(db, "users", result.user.uid);
       const docSnap = await getDoc(docRef);
 
@@ -80,9 +81,17 @@ export default function LoginPage() {
           { merge: true }
         );
       }
-      router.push(`/app?lang=${lang}`)
+      // router.push(`/`)
+      setUser(result.user);
     });
   }
+
+
+  // useEffect(() => {
+  //   if (user) {
+  //     router.push(`/`)
+  //   }
+  // }, [user]);
 
   return (
     <main className="flex flex-col items-center justify-center h-screen ">
