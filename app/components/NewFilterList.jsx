@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import Filter from "./Filter";
+import LoadingIcon from "public/icons/Loading.svg";
 
 export default function NewFilterList({ getter, selected, setSelected, isSwitching = null }) {
   // Every filter must have:
   //  title(string) type(string) and selected(boolean) properties
 
-  const { currentHabitType } = useAuthContext();
+  const { currentHabitType, loading } = useAuthContext();
 
   function getHabitClassNames(currentFilter, currentHabitType) {
     var classReturn = "";
@@ -26,20 +27,24 @@ export default function NewFilterList({ getter, selected, setSelected, isSwitchi
 
   return (
     <>
-      <ul className={`origin-left flex flex-wrap gap-2 ${isSwitching === true ? "-space-x-8 -ml-4 scale-x-90 opacity-50" : ""} duration-150 mb-4`}>
-        {getter.map((filter) => {
-          return (
-            <Filter
-              key={filter.title + filter.type}
-              filter={filter}
-              selected={selected}
-              setSelected={setSelected}
-              currentHabitType={currentHabitType}
-              getHabitClassNames={getHabitClassNames}
-            />
-          );
-        })}
-      </ul>
+      {loading == 2 ? (
+        <ul className={`origin-left flex flex-wrap gap-2 ${isSwitching === true ? "-space-x-8 -ml-4 scale-x-90 opacity-50" : ""} duration-150 mb-4`}>
+          {getter.map((filter) => {
+            return (
+              <Filter
+                key={filter.title + filter.type}
+                filter={filter}
+                selected={selected}
+                setSelected={setSelected}
+                currentHabitType={currentHabitType}
+                getHabitClassNames={getHabitClassNames}
+              />
+            );
+          })}
+        </ul>
+      ) : (
+        <LoadingIcon className="w-12 h-auto text-white animate-spin" />
+      )}
     </>
   );
 }

@@ -22,6 +22,7 @@ import useTranslation from 'next-translate/useTranslation'
 /* Icons */
 import MenuIcon from "public/icons/Menu.svg"
 import GearIcon from "public/icons/Gear.svg"
+import LoadingIcon from "public/icons/Loading.svg"
 
 export default function Home() {
   const { t, lang } = useTranslation('common');
@@ -44,7 +45,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (!user && !loading) {
+    if (!user && loading > 1) {
       router.push("/login");
     }
   }, [user, loading]);
@@ -58,10 +59,13 @@ export default function Home() {
     }
   }
 
-  if (loading)
+  if (loading < 1)
     return (
       <main className={`p-8 ${detectUserOSDarkMode ? "dark" : ""}`}>
-        <h2 className={`text-center text-pale-800 dark:text-pale-100 `}>Loading...</h2>
+        <h2 className={`text-center text-4xl mb-8 text-pale-800 dark:text-pale-100 `}>Habit Journey</h2>
+        <div className="animate-pulse">
+          <LoadingIcon className="w-12 h-auto mx-auto text-pale-800 dark:text-pale-100 animate-spin" />
+        </div>
         <div className="fixed inset-0 bg-pale-50 dark:bg-pale-900 z-[-100]  duration-1000 "></div>
       </main>
     );

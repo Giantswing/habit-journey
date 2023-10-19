@@ -5,10 +5,11 @@ import { useAuthContext } from "../context/AuthContext";
 import Habit from "./Habit";
 
 import useTranslation from "next-translate/useTranslation";
+import LoadingIcon from "public/icons/Loading.svg";
 
 export default function HabitList({ isSwitching }) {
   const { t } = useTranslation("common");
-  const { habits, currentHabitType, selectedFilters } = useAuthContext();
+  const { habits, currentHabitType, selectedFilters, loading } = useAuthContext();
 
   const filteredHabits = habits
     .filter((habit) => {
@@ -29,20 +30,26 @@ export default function HabitList({ isSwitching }) {
     });
 
   return (
-    <div className={`mb-8 ${isSwitching ? "-translate-x-40" : ""} duration-150`}>
-      <ul>
-        {filteredHabits.length > 0 ? (
-          filteredHabits
-            .sort((a, b) => {
-              if (a.enabled && !b.enabled) return -1;
-              if (!a.enabled && b.enabled) return 1;
-              return 0;
-            })
-            .map((habit) => <Habit key={habit.id} habit={habit} />)
-        ) : (
-          <p className="pr-8 text-left dark:text-white text-md">{t("Home.no-habits")}</p>
-        )}
-      </ul>
-    </div>
+    <>
+      {loading == 2 ? (
+        <div className={`mb-8 ${isSwitching ? "-translate-x-40" : ""} duration-150`}>
+          <ul>
+            {filteredHabits.length > 0 ? (
+              filteredHabits
+                .sort((a, b) => {
+                  if (a.enabled && !b.enabled) return -1;
+                  if (!a.enabled && b.enabled) return 1;
+                  return 0;
+                })
+                .map((habit) => <Habit key={habit.id} habit={habit} />)
+            ) : (
+              <p className="pr-8 text-left dark:text-white text-md">{t("Home.no-habits")}</p>
+            )}
+          </ul>
+        </div>
+      ) : (
+        <LoadingIcon className="w-12 h-auto text-white animate-spin" />
+      )}
+    </>
   );
 }

@@ -101,11 +101,11 @@ export default function Habit({ habit }) {
   useEffect(() => {
     var result = "";
     if (shouldWait) {
-      result = t("doing");
+      result = t("Habit.doing");
     } else if (!myHabit.enabled) {
-      result = t("disabled");
+      result = t("Habit.disabled");
     } else if (!myHabit.unlimited && myHabit.iterations >= myHabit.maxIterations) {
-      result = t("daily-limit");
+      result = t("Habit.daily-limit");
     }
     setAuxInfo(result);
   }, [shouldWait, myHabit.enabled, currentHabitType, myHabit.iterations, myHabit.maxIterations]);
@@ -182,10 +182,10 @@ export default function Habit({ habit }) {
       <div
         className={`font-semibold absolute top-1 right-1 px-2  text-xs text-white bg-black rounded-l-xl rounded-tr-sm  bg-opacity-0 ${
           auxInfo == "" ? "" : "bg-opacity-70"
-        } ${auxInfo == t("doing") ? "animate-pulse" : ""} duration-300`}
+        } ${auxInfo == t("Habit.doing") ? "animate-pulse" : ""} duration-300`}
       >
         <span className="flex items-center gap-2">
-          {auxInfo} {auxInfo == t("doing") && <LoadingIcon className="w-4 h-auto animate-spin" />}
+          {auxInfo} {auxInfo == t("Habit.doing") && <LoadingIcon className="w-4 h-auto animate-spin" />}
         </span>
       </div>
 

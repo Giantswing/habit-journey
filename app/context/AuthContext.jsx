@@ -14,7 +14,7 @@ export const AuthContext = createContext(null);
 export default function AuthContextProvider({ children, lang }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(0);
   const [score, setScore] = useState(0);
   const [habits, setHabits] = useState([]);
   const [currentHabitType, setCurrentHabitType] = useState("positive");
@@ -34,7 +34,7 @@ export default function AuthContextProvider({ children, lang }) {
 
   const [editMode, setEditMode] = useState(false);
   const [habitToEdit, setHabitToEdit] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(undefined);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   async function loadData({ userId }) {
@@ -126,6 +126,7 @@ export default function AuthContextProvider({ children, lang }) {
       setLanguage("en");
     }
 
+    setLoading(2);
     // console.log("loaded data sucessfully", "user id: " + userId);
     // console.log(db);
   }
@@ -275,7 +276,7 @@ export default function AuthContextProvider({ children, lang }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
-      setLoading(false);
+      setLoading(1);
       if (user) {
         loadData({ userId: user?.uid });
       } else {
