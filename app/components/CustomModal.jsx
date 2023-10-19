@@ -1,7 +1,10 @@
 import Image from "next/image";
 import CloseIcon from "public/icons/Close.svg";
+import Link from "next/link";
+import useTranslation from "next-translate/useTranslation";
 
 export default function CustomModal({ children, displayState, onClose, title }) {
+  const { lang } = useTranslation("common");
   return (
     <>
       <section
@@ -13,26 +16,32 @@ export default function CustomModal({ children, displayState, onClose, title }) 
         `}
       >
         <h2 className={`pb-3 mb-4 border-b font-semibold text-center text-pale-800 dark:text-pale-200`}>{title}</h2>
-        <button
+        <Link
+          href={`?lang=${lang}`}
+          as={`/${lang}`}
+          scroll={false}
           onClick={() => {
             onClose();
           }}
           className="absolute top-4 right-4 text-pale-600 dark:text-pale-300"
         >
           <CloseIcon className="text-lg" />
-        </button>
+        </Link>
 
         {children}
       </section>
 
-      <div
+      <Link
+        href={`?lang=${lang}`}
+        as={`/${lang}`}
+        scroll={false}
         onClick={() => {
           onClose();
         }}
         className={`duration-300 fixed z-40 top-0 left-0 w-full h-full bg-pale-900  ${
           displayState ? "block bg-opacity-80 pointer-events-auto" : "bg-opacity-0 pointer-events-none"
         }`}
-      ></div>
+      ></Link>
     </>
   );
 }

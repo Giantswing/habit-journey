@@ -77,7 +77,9 @@ export default function Home() {
           <section className="flex items-center justify-between pb-2 mb-4 border-b border-pale-300 dark:border-pale-600">
             <ScoreCounter />
 
-            <Link href={`?lang=${lang}&settings=true`}
+            <Link
+              href={`?lang=${lang}&settings=true`}
+              as={`/${lang}?settings=true`}
               className={`${showSideMenu ? "opacity-0" : "opacity-100"}
                       dark:text-pale-50`}
             >
@@ -100,25 +102,33 @@ export default function Home() {
               setSelected={setSelectedFilters}
               isSwitching={isSwitching}
             />
-            <Link href={`?lang=${lang}&filter=true`} className="text-pale-700 dark:text-pale-300">
+            <Link href={`?lang=${lang}&filter=true`}
+              as={`/${lang}?filter=true`}
+              scroll={false}
+
+              className="text-pale-700 dark:text-pale-300">
               <GearIcon className="text-lg text-pale-700 dark:text-pale-400" />
             </Link>
           </div>
 
           <HabitList isSwitching={isSwitching} />
 
-          <button
-            className={`w-full p-2 border rounded-md text-md ${currentHabitType === "positive"
+
+          <Link
+            href={`?lang=${lang}&habit=true`}
+            as={`/${lang}?habit=true`}
+            className={`w-full block text-center p-2 border rounded-md text-md ${currentHabitType === "positive"
               ? "border-green-600 text-green-600"
               : "border-red-500 text-red-500"
               }`}
             onClick={() => {
               setEditMode(false);
-              router.push(`?lang=${lang}&habit=true`);
+              // console.log("clicked")
+              // router.push(`?lang=${lang}&habit=true`, `/${lang}?habit=true`, { shallow: true, scroll: false });
             }}
           >
             {currentHabitType == "positive" ? t('Home.add-positive') : t('Home.add-negative')}
-          </button>
+          </Link>
         </div>
 
         <SwitchButton isSwitching={isSwitching} setIsSwitching={setIsSwitching} />

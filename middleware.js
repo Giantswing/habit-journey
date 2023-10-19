@@ -2,6 +2,16 @@ import { NextResponse } from "next/server";
 import i18n from "./i18n";
 
 export function middleware(request) {
+    //Take users to the login page if they are not logged in
+    // const nextUrl = request.nextUrl
+
+    // if (nextUrl.pathname === '/') {
+    //     if (!request.cookies.authToken) {
+    //         return NextResponse.rewrite(new URL('/login', request.url))
+    //     }
+    // }
+
+    //Rewrite the URL to include the locale
     const locale = request.nextUrl.locale || i18n.defaultLocale;
     request.nextUrl.searchParams.set("lang", locale);
     request.nextUrl.href = request.nextUrl.href.replace(`/${locale}`, "");

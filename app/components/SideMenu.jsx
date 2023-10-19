@@ -26,7 +26,7 @@ export default function SideMenu() {
         `}
       >
         <div className="relative flex justify-end block w-full mb-8 text-right">
-          <Link href={`/?lang=${lang}`}>
+          <Link href={`/?lang=${lang}`} as={`/${lang}`} scroll={false}>
             <CloseIcon className="w-12 h-auto text-pale-400" />
           </Link>
         </div>
@@ -79,13 +79,15 @@ export default function SideMenu() {
         </div>
       </div>
 
-      <div
-        onClick={() => router.push(`/?lang=${lang}`)}
+      <Link
+        href={`/?lang=${lang}`}
+        as={`/${lang}`}
+        scroll={false}
         className={`
       ${showSideMenu ? "bg-opacity-90 pointer-events-auto " : "bg-opacity-0 pointer-events-none "}
       fixed top-0 left-0 z-40 w-full h-full bg-pale-900  duration-300 ease-in-out
       `}
-      ></div>
+      ></Link>
     </>
   );
 }

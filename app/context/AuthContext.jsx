@@ -121,7 +121,7 @@ export default function AuthContextProvider({ children, lang }) {
 
     if (docSnap.data().language !== undefined) {
       setLanguage(docSnap.data().language);
-      router.push(`/?lang=${docSnap.data().language}`);
+      // router.push(`/?lang=${docSnap.data().language}`, `/${docSnap.data().language}`);
     } else {
       setLanguage("en");
     }
