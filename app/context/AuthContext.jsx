@@ -9,13 +9,14 @@ import { useRef } from "react";
 import { useLocale } from "next-intl";
 import { ChangeEvent, useTransition } from "react";
 import { usePathname, useRouter } from "next-intl/client";
+import defaultFilters from "@/defaults/defaultFilters.json";
 
 export const AuthContext = createContext(null);
 
 export default function AuthContextProvider({ children }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(0);
   const [score, setScore] = useState(0);
   const [habits, setHabits] = useState([]);
   const [currentHabitType, setCurrentHabitType] = useState("positive");
@@ -30,36 +31,6 @@ export default function AuthContextProvider({ children }) {
 
   const CryptoJS = require("crypto-js");
 
-  const defaultFilters = [
-    {
-      title: "all",
-      type: "positive",
-    },
-    {
-      title: "all",
-      type: "negative",
-    },
-    {
-      title: "sport",
-      type: "positive",
-    },
-    {
-      title: "work",
-      type: "positive",
-    },
-    {
-      title: "study",
-      type: "positive",
-    },
-    {
-      title: "leisure",
-      type: "negative",
-    },
-    {
-      title: "junk",
-      type: "negative",
-    },
-  ];
   const [filters, setFilters] = useState(defaultFilters);
   const [selectedFilters, setSelectedFilters] = useState({
     positive: "all",
@@ -159,6 +130,7 @@ export default function AuthContextProvider({ children }) {
       setLanguage(locale);
     }
 
+    setLoading(2);
     // console.log("loaded data sucessfully", "user id: " + userId);
     // console.log(db);
   }
@@ -309,7 +281,7 @@ export default function AuthContextProvider({ children }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
-      setLoading(false);
+      setLoading(1);
       if (user) {
         loadData({ userId: user?.uid });
       } else {

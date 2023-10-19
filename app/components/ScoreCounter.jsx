@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 
 import Link from "next/link";
 
+import LoadingIcon from "public/icons/Loading.svg";
 import GearIcon from "public/icons/Gear.svg";
 
 export default function ScoreCounter() {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreState, setScoreState] = useState("neutral");
-  const { score, soundEnabled } = useAuthContext();
-  const audio = new Audio("coin1.ogg");
+  const { score, soundEnabled, loading } = useAuthContext();
+  const audio = typeof Audio !== "undefined" && new Audio("coin1.ogg");
 
   var transitionAmount = 1;
   const [iterations, setIterations] = useState(0);
@@ -55,7 +56,7 @@ export default function ScoreCounter() {
       ${scoreState === "neutral" && "text-pale-600 dark:text-pale-300"}
     `}
       >
-        {parseInt(displayedScore)}
+        {loading == 2 ? parseInt(displayedScore) : <LoadingIcon className="w-12 h-auto animate-spin" />}
       </div>
       <GearIcon className="text-xl text-pale-700 dark:text-pale-400" />
     </Link>

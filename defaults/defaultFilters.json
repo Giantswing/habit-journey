@@ -1,0 +1,30 @@
+[
+  {
+    "title": "all",
+    "type": "positive"
+  },
+  {
+    "title": "all",
+    "type": "negative"
+  },
+  {
+    "title": "sport",
+    "type": "positive"
+  },
+  {
+    "title": "work",
+    "type": "positive"
+  },
+  {
+    "title": "study",
+    "type": "positive"
+  },
+  {
+    "title": "leisure",
+    "type": "negative"
+  },
+  {
+    "title": "junk",
+    "type": "negative"
+  }
+]
